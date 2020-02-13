@@ -1,0 +1,7 @@
+\chapter{Progress}
+
+So far, I have created a basic machine learning model for named entity recognition. In order to help label training data for the models I have created a tool that allows me to quickly tag tokens in sentences as either objects or sizes. This also forms the base of the feedback tool I have created.
+
+To assist with the initial capturing of data and to help the basic NER model I have researched into ways to make it more accurate without any initial training data. I have incorporated a model from the Python library NLTK that identifies part of speech (POS) tags for tokens. If the POS tag for a token identifies it as a noun, then the tool will flag this for human verification. Another way to assist the model is to use a gazetteer (list of known entities) such as Wordnet. If a token appears in Wordnet as an object, then it will also be flagged for human verification. Trying to identify sizes will initially be done with regular expressions as they’ll be accurate enough to provide training data without the need to have to implement a model. 
+
+I have also started looking into potential data sources to extract our information from. Currently I am looking to English Wikipedia as a potential source.

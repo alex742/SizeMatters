@@ -1,0 +1,27 @@
+\chapter{Introduction}
+
+Why its a problem
+
+This disseration project takes on the problem of determining the general sizes of different objects. Humans are talented at estimating sizes of objects based on common sense or memory and this skill helps us to determine distances of objects ......... Talk about scraping data from web pages - where are we getting it from?
+
+How effective this method will be and its limitations
+
+
+\section{Aims and Objectives}
+
+The aim of this dissertation is to make progress towards creating a database containing information about objects and their usual sizes. This can be broken down into three stages. Stage one is fulfilling our requirement of training data containing various objects and sizes. The aim is to train machine learning models to be able to identify objects and sizes within a sentence and determine if they are related. To collect enough data to adequately train these models we will use semi-supervised learning, which means that this stage will run simultaneously alongside stage two.
+
+Stage two is building the named entity recogniton and relationship extraction models for both identifying objects and sizes in text, and also determining if they are related. To help with the semi-supervised learning we can build some very basic models to start collecting data. Using regular expressions to determine sizes, and part-of-speech tagging to determine nouns, we can build models with poor accuracy but that will help in collecting data that can be refined into the final training set. 
+
+The final stage of the project will be to collect all the results into a database. The accuracy of the collected data can be improved if objects have been found multiple times. We can look at previously found sizes of the object to determine if this new measurement is accurate. If we introduce an object hierarchy to determine if objects are related then we can also use similar objects to estimate realistic sizes.
+
+
+\section{Overview of the Report}
+
+This dissertation will begin with a literature survey.
+
+This will be followed by the Methodology stage
+
+This will be followed by the Implementation stage
+
+The results

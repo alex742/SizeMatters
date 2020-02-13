@@ -1,0 +1,25 @@
+\chapter{Introduction}
+
+Understanding an objects size can help machine learning models in image and video recognition by allowing estimation of an unknown objects size by comparing them with other objects in the image. For example, if you had to classify an object in an image as either a dog or a horse knowing that it was stood next to a person, and that on average a person is larger than a dog but smaller than a horse, this could inform your classification.
+
+This dissertation takes on the problem of determining the general sizes of different objects. Humans are talented at estimating sizes of objects based on common sense or memory. As mentioned above this can help us make estimations about new objects, can help us to judge the distance of an object, or can help us to design accurate landscapes.
+
+Named entity recognition techniques have been shown to produce accurate results, as have relationship extraction models. Combining this with gazetteers for objects or units of size is likely to give good results. The limitation to these models will be the quality and quantity of the training data. This is a trade-off, increasing the quality of our data takes more time and therefore reduces the quantity we can gather. Therefore, this project will go with a semi-supervised learning technique that tries to strike a good balance between the two. 
+
+\section{Aims and Objectives}
+
+The aim of this dissertation is to make progress towards creating a database containing information about objects and their usual sizes. This can be broken down into three stages. Stage one is fulfilling our requirement of training data containing various objects and sizes. The aim is to train machine learning models to be able to identify objects and sizes within a sentence and determine if they are related. To collect enough data to adequately train these models we will use semi-supervised learning, which means that this stage will run simultaneously alongside stage two.
+
+Stage two is building the named entity recognition and relationship extraction models for both identifying objects and sizes in text and determining if they are related. To help with the semi-supervised learning we can build some very basic models to start collecting data. Using regular expressions to determine sizes, and part-of-speech tagging to determine nouns, we can build models with poor accuracy but that will help in collecting data that can be refined into the final training set. This final training set will be used to train the models and from there we can refine them to get the most accurate results.
+
+The final stage of the project will be to collect all the results into a database. The accuracy of the collected data can be improved if objects have been found multiple times. We can look at previously found sizes of the object to determine if this new measurement is accurate. If we introduce an object hierarchy to determine if objects are related, then we can also use similar objects to estimate realistic sizes.
+
+
+
+\section{Overview of the Report}
+
+This report will begin with a literature survey. Explaining the different options and previously tried techniques for various problems this project will face. It will give an overview of the technique, its advantages, and disadvatanges.
+
+This will be followed by an in-depth investigation into the requirements of the project and an analysis of the problem and how the project will be tackling it. This will be similar to the literature survey except it will only discuss why a technique has been chosen over another with regards to the nature of the project.
+
+This will be followed by an update on progress made so far and finally, there will be a conclusion and detailed project plan. This plan will include a gantt chart that acccurately shows deadlines for different aspects of the project.

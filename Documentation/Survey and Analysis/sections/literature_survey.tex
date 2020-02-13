@@ -1,0 +1,76 @@
+\chapter{Literature Survey}
+
+There has not been much previous work that has been done on this topic, but each of the individual aspects of the project have been researched in depth by other parties. The majority of the project is an information extraction task which has been widely researched with many technqiues to perform well on various forms of data. Other consierations to be made will be what tools/programming languages to use, and how to store both the training data and the results.
+
+\section{Information Extraction}
+
+The information extraction task can be broken down into two parts, named entity recognition and relationship extraction. This section will overview the problem, different technqiues for the tasks, their advantages, and thier disadvantages.
+
+\subsection{Named Entity Recognition}
+
+Named entity recognition is the process of identifying entities in text. This task can be broken down into finding the entities and classifying them into classes. The most common classes used for named entities are person names, organisations, and locations but you can build models to identify any class of entity. There are many challenges that come along with this, such as coreference, which is when an entity is referred to in the text but not by name. For example: “Henry Ford was born in 1863. He is known for founding the Ford Motor Company.”. In the second sentence the entity “Henry Ford” is referred to as “He”. This is called coreference and needs to be resolved before entities can be identified if you want to capture all instances of entities.
+
+Three primary approaches to named entity recognition are knowledge-engineering, supervised learning, and semi-supervised learning \citep{text_processing_lecture_5}:
+
+\subsubsection{Knowledge-Engineering}
+
+Knowledge-engineering approaches use gazetteers and human written rules to determine if a token is an entity. Its strengths are its high performance (on its specific domain) and its transparency. However, its weaknesses are that it requires domain experts to write the rules, changing to another domain requires possibly rewriting all the rules, and you need domain specific gazetteers.
+
+\subsubsection{Supervised Learning}
+
+Supervised learning is a technique that attempts to fix the generalisation problem in knowledge-engineering approaches. Supervised learning systems learn from labelled examples, moving to a new domain only requires a new set of labelled examples. These labelled examples include features which inform the model as to the context in which the token was found. Features for a named entity recognition model would usually include information about the token, previous and future tokens, their part of speech tag, and any other information that might be useful in identifying a specific class of entity. There are a variety of different models that can be built using supervised learning such as decision trees, support vector machines, and neural networks. The advantages of this approach are that the model is easier to generalise towards different domains, depending on your problem the level of expertise to label the data is usually less than would be required to write rules, and you don’t need any domain specific additional information such as gazetteers (Although these can help improve accuracy). Issues with this approach are usually that you need a large amount of annotated data for accurate results. Manually labelling that amount of data can take many hours, and in domains where the labelling might be subjective you would need multiple labellers to ensure high accuracy in your training data.
+
+\subsubsection{Semi-Supervised Learning}
+
+Semi-supervised learning is a similar approach to supervised, but the advantage is that you don’t need as many labelled examples in your training data. You have a small amount of labelled data as part of a larger unlabelled training data set. Using the labelled examples and by looking at the structure of the unlabelled data you attempt to form a model, you are relying on assumptions that either points close to one another share a class, points within a cluster share the same class, or the classes can be inferred by patterns hidden on a lower dimension than the input space \citep{semi-supervised_learning}.
+
+\subsection{Relationship Extraction}
+
+Relationship extraction is the process of determining if two or more entities in a text are related. Due to needing to know which tokens are entities this process can only be performed after named entity recognition or on a manually labelled set of text. An example of this relevant to the project would be the sentence: “The average apple is 7cm in diameter”. The relationship extraction task is to determine if the two entities, in this case the object “apple” and the size “7cm”, are related. There are techniques to tackle this problem with good results but there are some key challenges. Relationships over multiple sentences are much harder to detect and usually systems will ignore these relationships and only attempt to extract ones within a sentence. Semantic drift is another challenge, it describes the issue that arises when you use a small set of labelled training data for your model. If the model attempts to learn its own rules to generate more training data, an incorrect rule will generate more incorrect examples which will then generate more incorrect rules and repeat exponentially. This causes an exponential drift away from the initial accuracy of the labelled examples. Ways to combat this include human intervention, in the first few iterations where there are still relatively few examples, a human can manually check the results to see if they are accurate. However, this is not a perfect solution and semantic drift can be a significant factor in decreasing your model’s accuracy.
+
+Four primary approaches to relationship extraction are knowledge-engineering, supervised learning, bootstrapping and distant supervision \citep{text_processing_lecture_6}:
+
+\subsubsection{Knowledge-Engineering}
+
+Knowledge-Engineering approaches follow rules for identifying relationships. They can be split into two different categories: shallow, and deep. Shallow systems use pattern-action rules to determine if a relationship exists. For example:
+
+\begin{displayquote}
+Pattern: “\$Person, \$Position of \$Organisation” 
+\\Action:  add-relation(is-employed-by(\$Person, \$Organisation))
+\end{displayquote}
+
+\noindent Then the sentence “Mr. Wright, executive vice president of Merrill Lynch Canada” would match the pattern and the system would determine that “Mr. Wright” has a relationship to “Merrill Lynch Canada” of type “is-employed-by”.
+
+Deep systems use language rules to determine relationships. The means looking at examples and determining the grammatical relationships between the entities. For example, a subject, person, and an object, organisation, separated by a verb such as “works for” would indicate an is-employed-by relationship.
+
+Advantages of this approach are that it has high precision and is transparent, i.e. a human can read the rules to understand why a relationship has been classified in the way that it was. However, the disadvantages usually outweigh this as it is impossible to write all rules to capture all instances and the approach would need new rules to be written for every different domain.
+
+\subsubsection{Supervised Learning}
+
+Supervised learning for relationship extraction is similar to that for named entity recognition, covered in section 2.1.1. The differences come when choosing the features for the training data. Due to already have the entities identified the features would include these classifications. They would also include the tokens between the two entities as this could be informative in classifying their relationship.
+
+To reiterate, the strengths of this approach are its adaptability to new domains and the no requirement for writing complex rule sets. Disadvantages are that the model performance greatly relies on the quality and quantity of training data and the degree of which this data represents the real problem.
+
+\subsubsection{Bootstrapping}
+Bootstrapping can be thought of as a self-teaching model that starts by seeding it with a few examples. Given either some pattern examples or some relationship examples the model parse the training text to find relationships that fit these patterns or patterns that fit the relationships given. From here it will build new patterns from relationships found or build new relationships from patterns found. It can do this iteratively  until the rule set is deemed large enough.
+
+The strengths of this approach are that it requires no labelled data, just a few examples, which it can very quickly generate more from. The disadvantage to this is semantic drift, if the model incorrectly matches two entities to a relationship it will generate a rule from this pairing. This rule will then allow the model to discover more incorrect relationships. Every iteration the number of incorrect rules will exponentially increase decreasing the accuracy of the model.
+
+\subsubsection{Distant Supervision}
+
+The aim of this approach is to reduce the need for labelled examples. You can think of this approach of being a mixture between bootstrapping and supervised learning. You perform one iteration of bootstrapping on a large set of training text and use this to build your supervised learning model.
+
+The advantages of this is the reduced need for labelled training data and the speed at which the model learns new rules. The accuracy of these models is worse than that of supervised models (or very narrow domain knowledge-engineering models) but it requires much less data labelling.
+
+\section{Programming Languages}
+Python has recently become the go to language for data science and machine learning. Due to this there are a lot of libraries that have been built to assist programmers in these two domains. There are libraries for data manipulation and storage (numpy and pandas), libraries for natural language processing (NLTK), and libraries for building machine learning models (sci-kit learn). Python also has the advantage of being easy to write and understand due to its simplified syntax, this in turn makes programmining in faster and more efficient.
+
+However, due to Python being a relatively new language there are some advantages to using languages that have been around for longer. Another language that has some natural language processing roots is Java. One of the best natural language processing toolkits is StandfordNLP, a library for Java. Many academic projects investigating natural language processing techniques have been written with the assistance of this library and it has been proven to be a very powerful tool. Another advantage Java has over Python is that Java is a compiled language whereas Python is interpreted. This means that the run time of the Java system will be significantly faster once it has been compiled.
+
+\section{Datasets}
+
+One of the requirements for this project will be a large textual dataset that contains mentions of objects and their sizes. Other datasets that would be useful to the project would be any labelled sets that contain information on either objects, sizes, or both.
+
+\section{Databases}
+
+There are two main different types of databases, relational databases (SQL) and non-relational (NoSQL). SQL databases are used in situations where one items relationship to another is important. They follow strict standards to ensure low data redundancy and high reliability. However, if the data you need to store does not require relationships between items then a NoSQL database is often faster and more adaptable.
