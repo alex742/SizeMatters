@@ -68,7 +68,7 @@ inputFile = open("labelledSentences.pickle","rb")
 inputList = pickle.load(inputFile)
 inputFile.close()
 
-outputFile = open("labelledFeatures.txt", "a+")
+outputFile = open("labelledFeatures.txt", "w+")
 
 stemmer = PorterStemmer()
 
