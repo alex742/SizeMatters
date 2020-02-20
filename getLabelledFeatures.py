@@ -2,6 +2,8 @@ import pickle
 from nltk import pos_tag
 from nltk.tokenize import word_tokenize
 from nltk.stem.porter import PorterStemmer
+from nltk.corpus import stopwords
+import string
 
 def getStem(word, stemmer):
     return stemmer.stem(word)
@@ -24,7 +26,7 @@ def getPOSTag(line, wordNum):
 
     tags = pos_tag(words)
 
-    return tags[wordNum]
+    return tags[wordNum][1]
 
 def getPrevTokensClasses(line, wordNum):
     if wordNum > 2:
@@ -72,33 +74,39 @@ outputFile = open("labelledFeatures.txt", "w+")
 
 stemmer = PorterStemmer()
 
+###############################################################
+# Is removing stopwords a good idea?!
+###############################################################
+stopList = stopwords.words('english') + list(string.punctuation)
+
 allFeatures = []
 for line in inputList:
     for wordNum in range(len(line)):
-        # set up feature class tuple
-        features = {'token':line[wordNum][0].lower()}
-        classLabel = line[wordNum][1]
+        if line[wordNum][0] not in stopList:
+            # set up feature class tuple
+            features = {'token':line[wordNum][0].lower()}
+            classLabel = line[wordNum][1]
 
-        # add new features
-        # stemmed token
-        features['stemmed'] = getStem(line[wordNum][0].lower(), stemmer)
+            # add new features
+            # stemmed token
+            features['stemmed'] = getStem(line[wordNum][0].lower(), stemmer)
 
-        # token shape
-        features['shape'] = getShape(line[wordNum][0])
+            # token shape
+            features['shape'] = getShape(line[wordNum][0])
 
-        # part of speech tag
-        features['pos_tag'] = getPOSTag(line, wordNum)
+            # part of speech tag
+            features['pos_tag'] = getPOSTag(line, wordNum)
 
-        # Previous 3 tokens
-        # Previous 3 tokens classes
-        features['prev_tokens'], features['prev_classes'] = getPrevTokensClasses(line, wordNum)
+            # Previous 3 tokens
+            # Previous 3 tokens classes
+            features['prev_tokens'], features['prev_classes'] = getPrevTokensClasses(line, wordNum)
 
-        # Next 3 tokens
-        features['next_tokens'] = getNextTokens(line, wordNum)
+            # Next 3 tokens
+            features['next_tokens'] = getNextTokens(line, wordNum)
 
-        # save feature class tuple
-        outputFile.write(str((features, classLabel)) + "\n")
-        allFeatures.append((features, classLabel))
+            # save feature class tuple
+            outputFile.write(str((features, classLabel)) + "\n")
+            allFeatures.append((features, classLabel))
 
 with open('labelledFeatures.pickle', 'wb+') as f:
     pickle.dump(allFeatures, f)
