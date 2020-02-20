@@ -1,8 +1,10 @@
 from nltk.tokenize import word_tokenize
+import pickle
 
 inputFile = open("candidateSentencesUnits.txt", "r")
 outputFile = open("labelledSentences.txt", "a+")
 
+sentenceLabels = []
 for line in inputFile:
     words = word_tokenize(line)
     wordLabels = [] #line[:-2]
@@ -34,7 +36,11 @@ for line in inputFile:
             # works for both 'q' and 'o'
             wordLabels.append((word, 'o'))
 
-    outputFile.write(str(wordLabels)[1:-1] + '\n')
+    outputFile.write(str(wordLabels) + '\n')
+    sentenceLabels.append(wordLabels)
+
+with open('labelledSentences.pickle', 'wb+') as f:
+    pickle.dump(sentenceLabels, f)
 
 inputFile.close()
 outputFile.close()

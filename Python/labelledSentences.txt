@@ -1,0 +1,8 @@
+[('A', 'o'), ('building', 'Bn'), ('usually', 'o'), ('in', 'o'), ('the', 'o'), ('region', 'o'), ('of', 'o'), ('10', 'Bu'), ('and', 'Iu'), ('12', 'Iu'), ('meters', 'Iu'), ('tall', 'o'), ('.', 'o')]
+[('Alex', 'Bn'), ('is', 'o'), ('6', 'Bu'), ('foot', 'Iu'), ('3', 'Iu'), ('inches', 'Iu'), ('tall', 'o'), ('or', 'o'), ('191cm', 'Bu'), ('.', 'o')]
+[('191cm', 'Bu'), ('.', 'o')]
+[('Potatoes', 'Bn'), ('can', 'o'), ('be', 'o'), ('5', 'Bu'), ('inches', 'Iu'), ('in', 'o'), ('diameter', 'o'), ('.', 'o')]
+[('A', 'o'), ('building', 'Bn'), ('usually', 'o'), ('in', 'o'), ('the', 'o'), ('region', 'o'), ('of', 'o'), ('10', 'Bu'), ('and', 'Iu'), ('12', 'Iu'), ('meters', 'Iu'), ('tall', 'o'), ('.', 'o')]
+[('Alex', 'Bn'), ('is', 'o'), ('6', 'Bu'), ('foot', 'Iu'), ('3', 'Iu'), ('inches', 'Iu'), ('tall', 'o'), ('or', 'o'), ('191cm', 'Bu'), ('.', 'o')]
+[('191cm', 'Bu'), ('.', 'o')]
+[('Potatoes', 'Bn'), ('can', 'o'), ('be', 'o'), ('5', 'Bu'), ('inches', 'Iu'), ('in', 'o'), ('diameter', 'o'), ('.', 'o')]
