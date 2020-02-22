@@ -1,3 +1,6 @@
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
+
 import nltk
 import random
 from nltk.classify.scikitlearn import SklearnClassifier
@@ -46,10 +49,8 @@ inputFile.close()
 
 print(len(featuresets))
         
-training_set = featuresets[:18]
-testing_set =  featuresets[18:]
-
-print(testing_set)
+training_set = featuresets[:int(len(featuresets) * 0.9)]
+testing_set =  featuresets[int(len(featuresets) * 0.9):]
 
 ####################################################
 #  [ (features , class) ]
@@ -101,7 +102,7 @@ voted_classifier = VoteClassifier(NuSVC_classifier,
                                   BernoulliNB_classifier,
                                   LogisticRegression_classifier)
 
-print("voted_classifier accuracy percent:", (nltk.classify.accuracy(voted_classifier, testing_set))*100)
+print("\n\nvoted_classifier accuracy percent:", (nltk.classify.accuracy(voted_classifier, testing_set))*100)
 
 #print("Classification:", voted_classifier.classify(testing_set[0][0]), "Confidence %:",voted_classifier.confidence(testing_set[0][0])*100)
 #print("Classification:", voted_classifier.classify(testing_set[1][0]), "Confidence %:",voted_classifier.confidence(testing_set[1][0])*100)

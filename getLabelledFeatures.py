@@ -99,10 +99,11 @@ for line in inputList:
 
             # Previous 3 tokens
             # Previous 3 tokens classes
-            features['prev_tokens'], features['prev_classes'] = getPrevTokensClasses(line, wordNum)
+            prev_tokens_classes = getPrevTokensClasses(line, wordNum)
+            features['prev_tokens'], features['prev_classes'] = str(prev_tokens_classes[0]), str(prev_tokens_classes[1])
 
             # Next 3 tokens
-            features['next_tokens'] = getNextTokens(line, wordNum)
+            features['next_tokens'] = str(getNextTokens(line, wordNum))
 
             # save feature class tuple
             outputFile.write(str((features, classLabel)) + "\n")
