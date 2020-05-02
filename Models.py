@@ -9,9 +9,11 @@ import pickle
 from sklearn.naive_bayes import MultinomialNB, BernoulliNB
 from sklearn.linear_model import LogisticRegression, SGDClassifier
 from sklearn.svm import SVC, LinearSVC, NuSVC
+from sklearn.metrics import classification_report
 
 from nltk.classify import ClassifierI
 from statistics import mode
+import collections
 
 
 class VoteClassifier(ClassifierI):
@@ -43,78 +45,142 @@ class VoteClassifier(ClassifierI):
         conf = choice_votes / len(votes)
         return conf
 
+def precision(reference, test):
+    if len(test) == 0:
+        return None
+    else:
+        return len(reference.intersection(test)) / len(test)
+
+
+
+def recall(reference, test):
+    if len(reference) == 0:
+        return None
+    else:
+        return len(reference.intersection(test)) / len(reference)
+
+
+def f1_score(reference, test):
+    p = precision(reference, test)
+    r = recall(reference, test)
+
+    try:
+        return str(2 * ((p * r) / (p + r)))
+    except Exception:
+        return "None"
+
+def get_model_f1_score(model, testing_set, model_name, logfile):
+    y_true = []
+    y_pred = []
+    for i, (feats, label) in enumerate(testing_set):
+        observed = model.classify(feats)
+        y_true.append(label)
+        y_pred.append(observed)
+
+    print(classification_report(y_true, y_pred))
+    logfile.write(classification_report(y_true, y_pred))
+    
+
 def train(labelled_features_file, test_name):
     inputFile = open(labelled_features_file[:-4] + ".pickle","rb")
     featuresets = pickle.load(inputFile)
     inputFile.close()
-
-    print(len(featuresets))
             
     training_set = featuresets[:int(len(featuresets) * 0.9)]
-    testing_set =  featuresets[int(len(featuresets) * 0.9):]
+    #testing_set =  featuresets[int(len(featuresets) * 0.9):]
 
     ####################################################
     #  [ (features , class) ]
     #  features = {feature:value, feature:value, ...}
     ####################################################
 
-    test_log = open("tests/" + test_name + "/test_log.txt", "w+")
-
     MNB_classifier = SklearnClassifier(MultinomialNB())
     MNB_classifier.train(training_set)
-    test_log.write("MNB_classifier accuracy percent: " + str((nltk.classify.accuracy(MNB_classifier, testing_set))*100) + "\n")
     with open("tests/" + test_name + '/MNB.pickle', 'wb+') as f:
         pickle.dump(MNB_classifier, f)
 
     BernoulliNB_classifier = SklearnClassifier(BernoulliNB())
     BernoulliNB_classifier.train(training_set)
-    test_log.write("BernoulliNB_classifier accuracy percent: " + str((nltk.classify.accuracy(BernoulliNB_classifier, testing_set))*100) + "\n")
     with open("tests/" + test_name + '/BNB.pickle', 'wb+') as f:
         pickle.dump(BernoulliNB_classifier, f)
 
     LogisticRegression_classifier = SklearnClassifier(LogisticRegression())
     LogisticRegression_classifier.train(training_set)
-    test_log.write("LogisticRegression_classifier accuracy percent: " + str((nltk.classify.accuracy(LogisticRegression_classifier, testing_set))*100) + "\n")
     with open("tests/" + test_name + '/LogisticRegression.pickle', 'wb+') as f:
         pickle.dump(LogisticRegression_classifier, f)
 
     SGDClassifier_classifier = SklearnClassifier(SGDClassifier())
     SGDClassifier_classifier.train(training_set)
-    test_log.write("SGDClassifier_classifier accuracy percent: " + str((nltk.classify.accuracy(SGDClassifier_classifier, testing_set))*100) + "\n")
     with open("tests/" + test_name + '/SGD.pickle', 'wb+') as f:
         pickle.dump(SGDClassifier_classifier, f)
 
     SVC_classifier = SklearnClassifier(SVC())
     SVC_classifier.train(training_set)
-    test_log.write("SVC_classifier accuracy percent: " + str((nltk.classify.accuracy(SVC_classifier, testing_set))*100) + "\n")
     with open("tests/" + test_name + '/SVC.pickle', 'wb+') as f:
         pickle.dump(SVC_classifier, f)
 
     LinearSVC_classifier = SklearnClassifier(LinearSVC())
     LinearSVC_classifier.train(training_set)
-    test_log.write("LinearSVC_classifier accuracy percent: " + str((nltk.classify.accuracy(LinearSVC_classifier, testing_set))*100) + "\n")
     with open("tests/" + test_name + '/LinearSVC.pickle', 'wb+') as f:
         pickle.dump(LinearSVC_classifier, f)
 
     # NuSVC_classifier = SklearnClassifier(NuSVC())
     # NuSVC_classifier.train(training_set)
-    # test_log.write("NuSVC_classifier accuracy percent: " + str((nltk.classify.accuracy(NuSVC_classifier, testing_set))*100) + "\n")
     # with open("tests/" + test_name + '/NuSVC.pickle', 'wb+') as f:
     #     pickle.dump(NuSVC_classifier, f)
 
-    voted_classifier = VoteClassifier(
-                                    LinearSVC_classifier,
-                                    SGDClassifier_classifier,
-                                    MNB_classifier,
-                                    BernoulliNB_classifier,
-                                    LogisticRegression_classifier)
 
-    test_log.write("vote_classifier accuracy percent: " + str((nltk.classify.accuracy(voted_classifier, testing_set))*100) + "\n")
+def test(labelled_features_file, test_name):
+    inputFile = open(labelled_features_file[:-4] + ".pickle","rb")
+    featuresets = pickle.load(inputFile)
+    inputFile.close()
 
+    test_log = open("tests/" + test_name + "/test_log.txt", "w+")
 
+    print(len(featuresets))
+            
+    #training_set = featuresets[:int(len(featuresets) * 0.9)]
+    testing_set =  featuresets[int(len(featuresets) * 0.9):]
 
-def test(test_name):
-    print(test_name)
-    MNB_F = open("tests/" + "test_name" + "/MNB.pickle","rb")
+    MNB_F = open("tests/" + test_name + "/MNB.pickle","rb")
     MNB = pickle.load(MNB_F)
     MNB_F.close()
+    get_model_f1_score(MNB, testing_set, "MNB", test_log)
+
+    BNB_F = open("tests/" + test_name + "/BNB.pickle","rb")
+    BNB = pickle.load(BNB_F)
+    BNB_F.close()
+    get_model_f1_score(BNB, testing_set, "BNB", test_log)
+
+    LR_F = open("tests/" + test_name + "/LogisticRegression.pickle","rb")
+    LR = pickle.load(LR_F)
+    LR_F.close()
+    get_model_f1_score(LR, testing_set, "LR", test_log)
+
+    SGD_F = open("tests/" + test_name + "/SGD.pickle","rb")
+    SGD = pickle.load(SGD_F)
+    SGD_F.close()
+    get_model_f1_score(SGD, testing_set, "SGD", test_log)
+
+    SVC_F = open("tests/" + test_name + "/SVC.pickle","rb")
+    SVC = pickle.load(SVC_F)
+    SVC_F.close()
+    get_model_f1_score(SVC, testing_set, "SVC", test_log)
+
+    LSVC_F = open("tests/" + test_name + "/LinearSVC.pickle","rb")
+    LSVC = pickle.load(LSVC_F)
+    LSVC_F.close()
+    get_model_f1_score(LSVC, testing_set, "LSVC", test_log)
+
+    NuSVC_F = open("tests/" + test_name + "/NuSVC.pickle","rb")
+    NuSVC = pickle.load(NuSVC_F)
+    NuSVC_F.close()
+    get_model_f1_score(NuSVC, testing_set, "NuSVC", test_log)
+
+    VC = VoteClassifier(
+                        LSVC,
+                        SGD,
+                        MNB,
+                        BNB,
+                        LR)
+    get_model_f1_score(VC, testing_set, "VC", test_log)
