@@ -1,0 +1,45 @@
+\chapter{Requirements and analysis}
+
+The aims and objectives of this project (in chronological order) are as follows:
+
+\begin{enumerate}
+\item Build a data labelling tool
+\item Find a suitable text data source
+\item Build an NER model using POS, Wordnet, and regular expressions
+\item Label data found with NER model 1
+\item Build an NER model to identify objects and sizes in text using machine learning and data found from NER model 1
+\item Build a RE model to determine if an object and size in text are related using machine learning
+\item Build a feedback loop tool
+\item Correct NER model 2 and RE model 1 classifications and feedback into training data
+\item Create database to store data
+\item Use previous found instances of same objects to inform decision
+\item Use object hierarchy to inform decision
+\end{enumerate}
+
+Objective 9 marks the end goal of the project from a definition standpoint. Reaching this objective would mean that the project will have implemented the minimum requirements. The models might not be accurate, and the data might be poor, but a database of objects and their relative sizes will have been built using machine learning. Objectives 10 and 11 are additional steps that could help improve the accuracy of the model. These go alongside objectives 5 and 6, a model can quickly be built as a proof of concept initially, however improving the features used and the quality and quantity of the data can drastically change the outcome of the project.
+
+Objective 5 has a caveat, building a machine learning model to identify sizes might not be time efficient. Depending on the results of the regular expressions in objective 3 it might be more effective to stick with this approach and focus on the more difficult task of identifying objects. This is due to the simple nature of sizes, all sizes contain a unit, of which there are a limited number, and all sizes all contain a numeric value. Both things that are easily picked up by a regular expression.
+
+There is also an extension to this project that would be to include sizes of objects relative to others. For example, “That tree is as tall as a house.”, if you know the size of a house from previous text then you can infer that some trees are equal to this height.
+
+The evaluation of the project’s success will be difficult to measure. Testing the machine learning models using the labelled training data is an easy enough task, however depending on how the training data is gathered might skew our models. This means that although it might perform well on the test set, we need to ensure that the test set is an accurate representation of the real text we’re trying to extract information from. We can limit the gap by trying to include examples of all classifications. Sentences with just objects, just sizes, both objects and sizes, sentences where the object and size are related and sentences where they are not. The means that the model will have an accurate representation of all different possibilities.
+
+\section{Machine Learning Models}
+
+Semi-supervised learning is the technique that this project will employ in order to train models. This is due to the limited time in which the project must be completed, as well as a lack of readily available datasets that would be helpful for this task. It is a good compramise between supervised and unsupervised learning.
+
+Other approaches for information extraction such as knowledge-engineering could be a good fit for certain aspects of this project such as recognising sizes. Knowledge-engineering approaches approach the problem by using domain experts to write rules to capture the information. Rules for objects such as sizes could be as follows: The token must contain a unit of size (metres, m, ft, inches, etc), and the token must contain a numeric value (a scale of the size).
+
+Choosing the features for information extraction to inform the model is a difficult task. Tools can be used to analyse training data to determine which features are providing the most information. Features with high correlation can usually be reduced which helps to improve model size, run time, and accuracy. A starting set of features can be found in Speech and Language Processing by \cite{reference1} pp. 4. From this base we can use evaluate the models to see what features are most helpful in informing our classification.
+
+\section{Programming Languages}
+Despite the faster run time and existence of the StanfordNLP library, for machine learning and data science Python has the advantage. There are countless libraries that will allow the implementation of this project to be much more efficient. Also despite Python running more slowly, once the models are trained the processing time of classifying a token or relationship is small enough that it will not be an issue.
+
+
+\section{Datasets}
+The most readily available dataset that is likely to contain information on object size would be Wikipedia. English Wikipedia can be downloaded into an xml file of just over 60GB. Due to the nature of Wikipedia and the type of information it contains it is a good candidate for our primary text dataset. As it is used for educational purposes, sentences describing objects should be more common than in other text datasets.
+
+\section{Databases}
+
+The database for this project will be relatively simple and can be created using SQL. Database design guidelines explain the importance of normalising the tables to ensure that information is not stored multiple times. In the case of this project all we need to store is a reference to an object, and a list of found sizes which is why we prefer this method over a NoSQL approach.
+This is the database to store the results of our information extraction. We must also use a database to store the training data for the machine learning models. These will not need a relational database structure as all information can be contained in one row but due to the results being stored in an SQL database it makes sense for all data to be stored in the same place.
