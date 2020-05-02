@@ -62,44 +62,44 @@ def train(labelled_features_file, test_name):
 
     MNB_classifier = SklearnClassifier(MultinomialNB())
     MNB_classifier.train(training_set)
-    test_log.write("MNB_classifier accuracy percent: " + (nltk.classify.accuracy(MNB_classifier, testing_set))*100)
-    with open('MNB.pickle', 'wb+') as f:
+    test_log.write("MNB_classifier accuracy percent: " + str((nltk.classify.accuracy(MNB_classifier, testing_set))*100) + "\n")
+    with open("tests/" + test_name + '/MNB.pickle', 'wb+') as f:
         pickle.dump(MNB_classifier, f)
 
     BernoulliNB_classifier = SklearnClassifier(BernoulliNB())
     BernoulliNB_classifier.train(training_set)
-    test_log.write("BernoulliNB_classifier accuracy percent:", (nltk.classify.accuracy(BernoulliNB_classifier, testing_set))*100)
-    with open('BNB.pickle', 'wb+') as f:
+    test_log.write("BernoulliNB_classifier accuracy percent: " + str((nltk.classify.accuracy(BernoulliNB_classifier, testing_set))*100) + "\n")
+    with open("tests/" + test_name + '/BNB.pickle', 'wb+') as f:
         pickle.dump(BernoulliNB_classifier, f)
 
     LogisticRegression_classifier = SklearnClassifier(LogisticRegression())
     LogisticRegression_classifier.train(training_set)
-    test_log.write("LogisticRegression_classifier accuracy percent:", (nltk.classify.accuracy(LogisticRegression_classifier, testing_set))*100)
-    with open('LogisticRegression.pickle', 'wb+') as f:
+    test_log.write("LogisticRegression_classifier accuracy percent: " + str((nltk.classify.accuracy(LogisticRegression_classifier, testing_set))*100) + "\n")
+    with open("tests/" + test_name + '/LogisticRegression.pickle', 'wb+') as f:
         pickle.dump(LogisticRegression_classifier, f)
 
     SGDClassifier_classifier = SklearnClassifier(SGDClassifier())
     SGDClassifier_classifier.train(training_set)
-    test_log.write("SGDClassifier_classifier accuracy percent:", (nltk.classify.accuracy(SGDClassifier_classifier, testing_set))*100)
-    with open('SGD.pickle', 'wb+') as f:
+    test_log.write("SGDClassifier_classifier accuracy percent: " + str((nltk.classify.accuracy(SGDClassifier_classifier, testing_set))*100) + "\n")
+    with open("tests/" + test_name + '/SGD.pickle', 'wb+') as f:
         pickle.dump(SGDClassifier_classifier, f)
 
     SVC_classifier = SklearnClassifier(SVC())
     SVC_classifier.train(training_set)
-    test_log.write("SVC_classifier accuracy percent:", (nltk.classify.accuracy(SVC_classifier, testing_set))*100)
-    with open('SVC.pickle', 'wb+') as f:
+    test_log.write("SVC_classifier accuracy percent: " + str((nltk.classify.accuracy(SVC_classifier, testing_set))*100) + "\n")
+    with open("tests/" + test_name + '/SVC.pickle', 'wb+') as f:
         pickle.dump(SVC_classifier, f)
 
     LinearSVC_classifier = SklearnClassifier(LinearSVC())
     LinearSVC_classifier.train(training_set)
-    test_log.write("LinearSVC_classifier accuracy percent:", (nltk.classify.accuracy(LinearSVC_classifier, testing_set))*100)
-    with open('LinearSVC.pickle', 'wb+') as f:
+    test_log.write("LinearSVC_classifier accuracy percent: " + str((nltk.classify.accuracy(LinearSVC_classifier, testing_set))*100) + "\n")
+    with open("tests/" + test_name + '/LinearSVC.pickle', 'wb+') as f:
         pickle.dump(LinearSVC_classifier, f)
 
     # NuSVC_classifier = SklearnClassifier(NuSVC())
     # NuSVC_classifier.train(training_set)
-    # test_log.write("NuSVC_classifier accuracy percent:", (nltk.classify.accuracy(NuSVC_classifier, testing_set))*100)
-    # with open('NuSVC.pickle', 'wb+') as f:
+    # test_log.write("NuSVC_classifier accuracy percent: " + str((nltk.classify.accuracy(NuSVC_classifier, testing_set))*100) + "\n")
+    # with open("tests/" + test_name + '/NuSVC.pickle', 'wb+') as f:
     #     pickle.dump(NuSVC_classifier, f)
 
     voted_classifier = VoteClassifier(
@@ -109,7 +109,7 @@ def train(labelled_features_file, test_name):
                                     BernoulliNB_classifier,
                                     LogisticRegression_classifier)
 
-    test_log.write("vote_classifier accuracy percent:", (nltk.classify.accuracy(voted_classifier, testing_set))*100)
+    test_log.write("vote_classifier accuracy percent: " + str((nltk.classify.accuracy(voted_classifier, testing_set))*100) + "\n")
 
 
 
