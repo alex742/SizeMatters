@@ -74,10 +74,6 @@ def getLabelledFeatures(labelled_sentences_file, labelled_features_file):
     outputFile = open(labelled_features_file, "w+")
 
     stemmer = PorterStemmer()
-
-    ###############################################################
-    # Is removing stopwords a good idea?!
-    ###############################################################
     stopList = stopwords.words('english') + list(string.punctuation)
 
     allFeatures = []
@@ -101,7 +97,7 @@ def getLabelledFeatures(labelled_sentences_file, labelled_features_file):
                 # Previous 3 tokens
                 # Previous 3 tokens classes
                 prev_tokens_classes = getPrevTokensClasses(line, wordNum)
-                features['prev_tokens'], features['prev_classes'] = str(prev_tokens_classes[0]), str(prev_tokens_classes[1])
+                features['prev_tokens'], features['prev_classes'] = str(prev_tokens_classes[0]).lower(), str(prev_tokens_classes[1]).lower()
 
                 # Next 3 tokens
                 features['next_tokens'] = str(getNextTokens(line, wordNum))

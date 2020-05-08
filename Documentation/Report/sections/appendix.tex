@@ -1,0 +1,94 @@
+\chapter{Testing}
+
+\subsection{Getting candidate sentences}
+\begin{longtable}[c]{|l|l|l|l|}
+\caption{Tests performed on the labelling tool for generating labelled training data}
+\label{tab:candidate_tests}\\
+\hline
+\textbf{Test} & \textbf{Input} & \textbf{\begin{tabular}[c]{@{}l@{}}Expected\\ Output\end{tabular}} & \textbf{Pass/Fail} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+Iterating through all sentences & \begin{tabular}[c]{@{}l@{}}Text containing multiple\\ sentences per line\end{tabular} & \begin{tabular}[c]{@{}l@{}}Iterates over each\\ sentence on each line\end{tabular} & Pass \\ \hline
+\begin{tabular}[c]{@{}l@{}}Outputs candidate sentences\\ to file\end{tabular} & - & \begin{tabular}[c]{@{}l@{}}candidate sentences\\ text file\end{tabular} & Pass \\ \hline
+Wordnet detects noun & \begin{tabular}[c]{@{}l@{}}Sentence with no Wordnet\\ noun\\ \\ Sentence with Wordnet noun\end{tabular} & \begin{tabular}[c]{@{}l@{}}Not candidate\\ sentence\\ \\ Candidate sentence\end{tabular} & \begin{tabular}[c]{@{}l@{}}Pass\\ \\ \\ Pass\end{tabular} \\ \hline
+\begin{tabular}[c]{@{}l@{}}Part of speech tagger detects\\ noun\end{tabular} & \begin{tabular}[c]{@{}l@{}}Sentence not containing\\ noun\\ \\ Sentence containing\\ noun\end{tabular} & \begin{tabular}[c]{@{}l@{}}Not candidate\\ sentence\\ \\ Candidate sentence\end{tabular} & \begin{tabular}[c]{@{}l@{}}Pass\\ \\ \\ Pass\end{tabular} \\ \hline
+Regex detects size & \begin{tabular}[c]{@{}l@{}}Sentence with no unit of size\\ \\ \\ Sentence with unit of size\end{tabular} & \begin{tabular}[c]{@{}l@{}}Not candidate\\ sentence\\ \\ Candidate sentence\end{tabular} & \begin{tabular}[c]{@{}l@{}}Pass\\ \\ \\ Pass\end{tabular} \\ \hline
+\end{longtable}
+
+\subsection{Labelling sentences}
+\begin{longtable}[c]{|l|l|l|l|}
+\caption{Tests performed on the labelling tool for generating labelled training data}
+\label{tab:labelling_tests}\\
+\hline
+\textbf{Test} & \textbf{Input} & \textbf{\begin{tabular}[c]{@{}l@{}}Expected\\ Output\end{tabular}} & \textbf{Pass/Fail} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+Iterating through all sentences & \begin{tabular}[c]{@{}l@{}}Text containing multiple\\ sentences per line\end{tabular} & \begin{tabular}[c]{@{}l@{}}Iterates over each\\ sentence on each line\end{tabular} & Pass \\ \hline
+Labelling different entities & \begin{tabular}[c]{@{}l@{}}Sentence containing objects,\\ sizes, and non-entities\end{tabular} & \begin{tabular}[c]{@{}l@{}}Labels entities using\\ BIO scheme\end{tabular} & Pass \\ \hline
+Labelling relationships & \begin{tabular}[c]{@{}l@{}}Sentence containing\\ relationship\\ \\ Sentence not containing\\ relationship\end{tabular} & \begin{tabular}[c]{@{}l@{}}Labels sentence as\\ "relationship"\\ \\ Labels sentence as\\ "o"\end{tabular} & \begin{tabular}[c]{@{}l@{}}Pass\\ \\ \\ Pass\end{tabular} \\ \hline
+\begin{tabular}[c]{@{}l@{}}Outputting labelled sentences\\ to a file\end{tabular} & - & \begin{tabular}[c]{@{}l@{}}labelled sentences\\ text file\end{tabular} & Pass \\ \hline
+\begin{tabular}[c]{@{}l@{}}Skipping relationship labelling\\ of not at least one of each\\ entity\end{tabular} & \begin{tabular}[c]{@{}l@{}}Text only containing an object\\ \\ Text only containing a size\\ \\ Text containing no entities\end{tabular} & \begin{tabular}[c]{@{}l@{}}Labels as "o"\\ \\ Labels as "o"\\ \\ Labels as "o"\end{tabular} & \begin{tabular}[c]{@{}l@{}}Pass\\ \\ Pass\\ \\ Pass\end{tabular} \\ \hline
+Label all as "o" input & \begin{tabular}[c]{@{}l@{}}Inputting "q" at start of\\ sentence\end{tabular} & \begin{tabular}[c]{@{}l@{}}Labels sentence as \\ "o"\end{tabular} & Pass \\ \hline
+\begin{tabular}[c]{@{}l@{}}Label rest of sentence as "o"\\ input\end{tabular} & \begin{tabular}[c]{@{}l@{}}Inputting "q" midway through\\ sentence\end{tabular} & \begin{tabular}[c]{@{}l@{}}Labels first half as\\ input, second has as\\ "o"\end{tabular} & Pass \\ \hline
+\end{longtable}
+
+\subsection{Generating features}
+\begin{longtable}[c]{|l|l|l|l|}
+\caption{Tests performed on the generation of different features for the named entity recognition models}
+\label{tab:ner_features_tests}\\
+\hline
+\textbf{Test} & \textbf{Input} & \textbf{\begin{tabular}[c]{@{}l@{}}Expected\\ Output\end{tabular}} & \textbf{Pass/Fail} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+Token & "token" & "token" & Pass \\ \hline
+Stemmed token & \begin{tabular}[c]{@{}l@{}}"build"\\ \\ "builds"\\ \\ "building"\\ \\ "buildings"\end{tabular} & \begin{tabular}[c]{@{}l@{}}"build"\\ \\ "build"\\ \\ "build"\\ \\ "build"\end{tabular} & \begin{tabular}[c]{@{}l@{}}Pass\\ \\ Pass\\ \\ Pass\\ \\ Pass\end{tabular} \\ \hline
+Shape & \begin{tabular}[c]{@{}l@{}}"Title"\\ \\ "lower"\\ \\ "UPPER"\end{tabular} & \begin{tabular}[c]{@{}l@{}}"Xxxxx"\\ \\ "xxxxx"\\ \\ "XXXXX"\end{tabular} & \begin{tabular}[c]{@{}l@{}}Pass\\ \\ Pass\\ \\ Pass\end{tabular} \\ \hline
+Part of speech tag & \begin{tabular}[c]{@{}l@{}}"saw" in sentence as noun\\ \\ "saw" in sentence as verb\end{tabular} & \begin{tabular}[c]{@{}l@{}}Tagged as noun\\ \\ Tagged as verb\end{tabular} & \begin{tabular}[c]{@{}l@{}}Pass\\ \\ Pass\end{tabular} \\ \hline
+Previous 3 tokens & \begin{tabular}[c]{@{}l@{}}Token, 1st in sentence\\ \\ Token, 2nd in sentence\\ \\ \\ \\ Token, 3rd in sentence\\ \\ \\ \\ Token, 4th in sentence\end{tabular} & \begin{tabular}[c]{@{}l@{}}Three empty strings\\ \\ Two empty strings\\ and previous token\\ \\ One empty string\\ and two previous\\ tokens\\ \\ Three previous\\ tokens\end{tabular} & \begin{tabular}[c]{@{}l@{}}Pass\\ \\ Pass\\ \\ \\ \\ Pass\\ \\ \\ \\ Pass\end{tabular} \\ \hline
+Next 3 tokens & \begin{tabular}[c]{@{}l@{}}Token, 4th last in sentence\\ \\ Token, 3rd last in sentence\\ \\ \\ Token, 2nd last in sentence\\ \\ \\ Token, last in sentence\end{tabular} & \begin{tabular}[c]{@{}l@{}}Next three tokens\\ \\ Next two tokens and \\ empty string\\ \\ Next token and two\\ empty strings\\ \\ Three empty strings\end{tabular} & \begin{tabular}[c]{@{}l@{}}Pass\\ \\ Pass\\ \\ \\ Pass\\ \\ \\ Pass\end{tabular} \\ \hline
+\begin{tabular}[c]{@{}l@{}}Presence in Wordnet\\ as a noun\end{tabular} & \begin{tabular}[c]{@{}l@{}}Token that is noun in Wordnet\\ \\ Token that isn't noun in\\ Wordnet\end{tabular} & \begin{tabular}[c]{@{}l@{}}"True"\\ \\ "False"\end{tabular} & \begin{tabular}[c]{@{}l@{}}Pass\\ \\ Pass\end{tabular} \\ \hline
+Contains numbers & \begin{tabular}[c]{@{}l@{}}"nonumbers"\\ \\ "numbers123"\end{tabular} & \begin{tabular}[c]{@{}l@{}}"False"\\ \\ "True"\end{tabular} & \begin{tabular}[c]{@{}l@{}}Pass\\ \\ Pass\end{tabular} \\ \hline
+\begin{tabular}[c]{@{}l@{}}Contains a unit of\\ size\end{tabular} & \begin{tabular}[c]{@{}l@{}}"nounit"\\ \\ "cm"\end{tabular} & \begin{tabular}[c]{@{}l@{}}"False"\\ \\ "True"\end{tabular} & \begin{tabular}[c]{@{}l@{}}Pass\\ \\ Pass\end{tabular} \\ \hline
+Sub-tokens & \begin{tabular}[c]{@{}l@{}}"token"\\ \\ "12cm"\end{tabular} & \begin{tabular}[c]{@{}l@{}}Empty tuple\\ \\ "12", "cm"\end{tabular} & \begin{tabular}[c]{@{}l@{}}Pass\\ \\ Pass\end{tabular} \\ \hline
+\end{longtable}
+
+
+\begin{longtable}[c]{|l|l|l|l|}
+\caption{Tests performed on the generation of different features for the relationship extraction models}
+\label{tab:re_features_tests}\\
+\hline
+\textbf{Test} & \textbf{Input} & \textbf{\begin{tabular}[c]{@{}l@{}}Expected\\ Output\end{tabular}} & \textbf{Pass/Fail} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+Object entity & \begin{tabular}[c]{@{}l@{}}Sentence with object\\ entity "Alex"\end{tabular} & "Alex" & Pass \\ \hline
+Size entity & \begin{tabular}[c]{@{}l@{}}Sentence with size\\ entity "6 foot 3 inches"\end{tabular} & "6 foot 3 inches" & Pass \\ \hline
+\begin{tabular}[c]{@{}l@{}}Bag of words\\ between entities\end{tabular} & \begin{tabular}[c]{@{}l@{}}No words between\\ entities\\ \\ No repeating words\\ between entities\\ \\ Repeating words between\\ entities\end{tabular} & \begin{tabular}[c]{@{}l@{}}Empty list\\ \\ \\ List of words\\ \\ \\ List of unique words\end{tabular} & \begin{tabular}[c]{@{}l@{}}Pass\\ \\ \\ Pass\\ \\ \\ Pass\end{tabular} \\ \hline
+\begin{tabular}[c]{@{}l@{}}Number of words\\ between entities\end{tabular} & \begin{tabular}[c]{@{}l@{}}No words between entities\\ \\ 5 words between entities\end{tabular} & \begin{tabular}[c]{@{}l@{}}0\\ \\ 5\end{tabular} & \begin{tabular}[c]{@{}l@{}}Pass\\ \\ Pass\end{tabular} \\ \hline
+\begin{tabular}[c]{@{}l@{}}Presence of verb\\ between entities\end{tabular} & \begin{tabular}[c]{@{}l@{}}No words between entities\\ \\ Non-verbs between\\ entities\\ \\ Verb between entities\end{tabular} & \begin{tabular}[c]{@{}l@{}}"False"\\ \\ "False"\\ \\ \\ "True"\end{tabular} & \begin{tabular}[c]{@{}l@{}}Pass\\ \\ Pass\\ \\ \\ Pass\end{tabular} \\ \hline
+\begin{tabular}[c]{@{}l@{}}Order of\\ appearance\end{tabular} & \begin{tabular}[c]{@{}l@{}}Object appears first\\ \\ Size appears first\end{tabular} & \begin{tabular}[c]{@{}l@{}}"Object"\\ \\ "Size"\end{tabular} & \begin{tabular}[c]{@{}l@{}}Pass\\ \\ Pass\end{tabular} \\ \hline
+\end{longtable}
+
+\subsection{Training and testing models}
+\begin{longtable}[c]{|l|l|l|l|}
+\caption{Tests performed on the labelling tool for generating labelled training data}
+\label{tab:model_tests}\\
+\hline
+\textbf{Test} & \textbf{Input} & \textbf{\begin{tabular}[c]{@{}l@{}}Expected\\ Output\end{tabular}} & \textbf{Pass/Fail} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+\begin{tabular}[c]{@{}l@{}}Split labelled features into\\ training and testing sets\end{tabular} & Labelled features dataset & \begin{tabular}[c]{@{}l@{}}Training and testing\\ datasets\end{tabular} & Pass \\ \hline
+Trains models & Training data & Trained model & Pass \\ \hline
+Tests models & Testing data, model & Model performance & Pass \\ \hline
+\begin{tabular}[c]{@{}l@{}}Outputs models as pickle\\ files\end{tabular} & - & \begin{tabular}[c]{@{}l@{}}A pickle file for \\ each model\end{tabular} & Pass \\ \hline
+\begin{tabular}[c]{@{}l@{}}Outputs model performance\\ into logfile\end{tabular} & - & Logfile & Pass \\ \hline
+\end{longtable}
