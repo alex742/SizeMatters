@@ -81,7 +81,7 @@ def get_model_f1_score(model, testing_set, model_name, logfile):
     logfile.write(classification_report(y_true, y_pred))
     
 
-def train(labelled_features_file, test_name):
+def train(labelled_features_file, test_name, ent):
     inputFile = open(labelled_features_file[:-4] + ".pickle","rb")
     featuresets = pickle.load(inputFile)
     inputFile.close()
@@ -96,41 +96,41 @@ def train(labelled_features_file, test_name):
 
     MNB_classifier = SklearnClassifier(MultinomialNB())
     MNB_classifier.train(training_set)
-    with open("tests/" + test_name + '/MNB.pickle', 'wb+') as f:
+    with open("tests/" + test_name + '/MNB_' + ent + '.pickle', 'wb+') as f:
         pickle.dump(MNB_classifier, f)
 
     BernoulliNB_classifier = SklearnClassifier(BernoulliNB())
     BernoulliNB_classifier.train(training_set)
-    with open("tests/" + test_name + '/BNB.pickle', 'wb+') as f:
+    with open("tests/" + test_name + '/BNB_' + ent + '.pickle', 'wb+') as f:
         pickle.dump(BernoulliNB_classifier, f)
 
     LogisticRegression_classifier = SklearnClassifier(LogisticRegression())
     LogisticRegression_classifier.train(training_set)
-    with open("tests/" + test_name + '/LogisticRegression.pickle', 'wb+') as f:
+    with open("tests/" + test_name + '/LogisticRegression_' + ent + '.pickle', 'wb+') as f:
         pickle.dump(LogisticRegression_classifier, f)
 
     SGDClassifier_classifier = SklearnClassifier(SGDClassifier())
     SGDClassifier_classifier.train(training_set)
-    with open("tests/" + test_name + '/SGD.pickle', 'wb+') as f:
+    with open("tests/" + test_name + '/SGD_' + ent + '.pickle', 'wb+') as f:
         pickle.dump(SGDClassifier_classifier, f)
 
     SVC_classifier = SklearnClassifier(SVC())
     SVC_classifier.train(training_set)
-    with open("tests/" + test_name + '/SVC.pickle', 'wb+') as f:
+    with open("tests/" + test_name + '/SVC_' + ent + '.pickle', 'wb+') as f:
         pickle.dump(SVC_classifier, f)
 
     LinearSVC_classifier = SklearnClassifier(LinearSVC())
     LinearSVC_classifier.train(training_set)
-    with open("tests/" + test_name + '/LinearSVC.pickle', 'wb+') as f:
+    with open("tests/" + test_name + '/LinearSVC_' + ent + '.pickle', 'wb+') as f:
         pickle.dump(LinearSVC_classifier, f)
 
     # NuSVC_classifier = SklearnClassifier(NuSVC())
     # NuSVC_classifier.train(training_set)
-    # with open("tests/" + test_name + '/NuSVC.pickle', 'wb+') as f:
+    # with open("tests/" + test_name + '/NuSVC_' + ent + '.pickle', 'wb+') as f:
     #     pickle.dump(NuSVC_classifier, f)
 
 
-def test(labelled_features_file, test_name):
+def test(labelled_features_file, test_name, ent):
     inputFile = open(labelled_features_file[:-4] + ".pickle","rb")
     featuresets = pickle.load(inputFile)
     inputFile.close()
@@ -142,40 +142,40 @@ def test(labelled_features_file, test_name):
     #training_set = featuresets[:int(len(featuresets) * 0.9)]
     testing_set =  featuresets[int(len(featuresets) * 0.9):]
 
-    MNB_F = open("tests/" + test_name + "/MNB.pickle","rb")
+    MNB_F = open("tests/" + test_name + "/MNB_" + ent + ".pickle","rb")
     MNB = pickle.load(MNB_F)
     MNB_F.close()
     get_model_f1_score(MNB, testing_set, "MNB", test_log)
 
-    BNB_F = open("tests/" + test_name + "/BNB.pickle","rb")
+    BNB_F = open("tests/" + test_name + "/BNB_" + ent + ".pickle","rb")
     BNB = pickle.load(BNB_F)
     BNB_F.close()
     get_model_f1_score(BNB, testing_set, "BNB", test_log)
 
-    LR_F = open("tests/" + test_name + "/LogisticRegression.pickle","rb")
+    LR_F = open("tests/" + test_name + "/LogisticRegression_" + ent + ".pickle","rb")
     LR = pickle.load(LR_F)
     LR_F.close()
     get_model_f1_score(LR, testing_set, "LR", test_log)
 
-    SGD_F = open("tests/" + test_name + "/SGD.pickle","rb")
+    SGD_F = open("tests/" + test_name + "/SGD_" + ent + ".pickle","rb")
     SGD = pickle.load(SGD_F)
     SGD_F.close()
     get_model_f1_score(SGD, testing_set, "SGD", test_log)
 
-    SVC_F = open("tests/" + test_name + "/SVC.pickle","rb")
+    SVC_F = open("tests/" + test_name + "/SVC_" + ent + ".pickle","rb")
     SVC = pickle.load(SVC_F)
     SVC_F.close()
     get_model_f1_score(SVC, testing_set, "SVC", test_log)
 
-    LSVC_F = open("tests/" + test_name + "/LinearSVC.pickle","rb")
+    LSVC_F = open("tests/" + test_name + "/LinearSVC_" + ent + ".pickle","rb")
     LSVC = pickle.load(LSVC_F)
     LSVC_F.close()
     get_model_f1_score(LSVC, testing_set, "LSVC", test_log)
 
-    NuSVC_F = open("tests/" + test_name + "/NuSVC.pickle","rb")
-    NuSVC = pickle.load(NuSVC_F)
-    NuSVC_F.close()
-    get_model_f1_score(NuSVC, testing_set, "NuSVC", test_log)
+    # NuSVC_F = open("tests/" + test_name + "/NuSVC_" + ent + ".pickle","rb")
+    # NuSVC = pickle.load(NuSVC_F)
+    # NuSVC_F.close()
+    # get_model_f1_score(NuSVC, testing_set, "NuSVC", test_log)
 
     VC = VoteClassifier(
                         LSVC,
