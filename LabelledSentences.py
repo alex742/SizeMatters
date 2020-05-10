@@ -79,7 +79,7 @@ def getLabelledSentences(candidate_sentences_file, labelled_sentences_file):
             for n in nlist:
                 # label as relationship
                 print("\nRelationship?\n\n" + line + "\n" + str(u) + " --- " + str(n) + "\n")
-                r = input("")
+                r = input("Label: ")
 
                 features = {}
 

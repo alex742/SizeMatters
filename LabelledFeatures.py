@@ -71,7 +71,7 @@ def getLabelledFeatures(labelled_sentences_file, labelled_features_file):
     inputList = pickle.load(inputFile)
     inputFile.close()
 
-    outputFile = open(labelled_features_file, "w+")
+    outputFile = open(labelled_features_file, "w+", encoding="utf-8")
 
     stemmer = PorterStemmer()
     stopList = stopwords.words('english') + list(string.punctuation)

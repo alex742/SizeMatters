@@ -85,9 +85,88 @@ def train(labelled_features_file, test_name, ent):
     inputFile = open(labelled_features_file[:-4] + ".pickle","rb")
     featuresets = pickle.load(inputFile)
     inputFile.close()
+    
+    fair = False
+    loops = 0
+    if ent == "ner":
+        while not fair:
+            loops += 1
+            random.shuffle(featuresets)
+            training_set = featuresets[:int(len(featuresets) * 0.9)]
+            testing_set =  featuresets[int(len(featuresets) * 0.9):]
+
+            tro = False
+            trbu = False
+            triu = False
+            trbn = False
+            trin = False
+            for featureset in training_set:
+                if featureset[1] == "o":
+                    tro = True
+                elif featureset[1] == "Bu":
+                    trbu = True
+                elif featureset[1] == "Iu":
+                    triu = True
+                elif featureset[1] == "Bn":
+                    trbn = True
+                elif featureset[1] == "In":
+                    trin = True
             
-    training_set = featuresets[:int(len(featuresets) * 0.9)]
-    #testing_set =  featuresets[int(len(featuresets) * 0.9):]
+            teo = False
+            tebu = False
+            teiu = False
+            tebn = False
+            tein = False
+            for featureset in testing_set:
+                if featureset[1] == "o":
+                    teo = True
+                elif featureset[1] == "Bu":
+                    tebu = True
+                elif featureset[1] == "Iu":
+                    teiu = True
+                elif featureset[1] == "Bn":
+                    tebn = True
+                elif featureset[1] == "In":
+                    tein = True
+
+            if tro and trbu and triu and trbn and trin and teo and tebu and teiu and tebn and tein:
+                print("FAIR")
+                fair = True
+
+            if loops > 100:
+                print("LOOOOPS")
+                fair = True
+                
+    else:
+        while not fair:
+            loops += 1
+            random.shuffle(featuresets)
+            training_set = featuresets[:int(len(featuresets) * 0.9)]
+            testing_set =  featuresets[int(len(featuresets) * 0.9):]
+
+            tro = False
+            trr = False
+            for featureset in training_set:
+                if featureset[1] == "o":
+                    tro = True
+                elif featureset[1] == "r":
+                    trr= True
+            
+            teo = False
+            ter = False
+            for featureset in testing_set:
+                if featureset[1] == "o":
+                    teo = True
+                elif featureset[1] == "r":
+                    ter = True
+
+            if tro and trr and teo and ter:
+                print("FAIR")
+                fair = True
+
+            if loops > 100:
+                print("LOOOOPS")
+                fair = True
 
     ####################################################
     #  [ (features , class) ]
@@ -129,18 +208,20 @@ def train(labelled_features_file, test_name, ent):
     # with open("tests/" + test_name + '/NuSVC_' + ent + '.pickle', 'wb+') as f:
     #     pickle.dump(NuSVC_classifier, f)
 
+    return testing_set
 
-def test(labelled_features_file, test_name, ent):
-    inputFile = open(labelled_features_file[:-4] + ".pickle","rb")
-    featuresets = pickle.load(inputFile)
-    inputFile.close()
 
-    test_log = open("tests/" + test_name + "/test_log.txt", "w+")
+def test(labelled_features_file, test_name, ent, testing_set):
+    # inputFile = open(labelled_features_file[:-4] + ".pickle","rb")
+    # featuresets = pickle.load(inputFile)
+    # inputFile.close()
 
-    print(len(featuresets))
+    test_log = open("tests/" + test_name + "/test_log_" + ent + ".txt", "w+")
+
+    # print(len(featuresets))
             
     #training_set = featuresets[:int(len(featuresets) * 0.9)]
-    testing_set =  featuresets[int(len(featuresets) * 0.9):]
+    #testing_set =  featuresets[int(len(featuresets) * 0.9):]
 
     MNB_F = open("tests/" + test_name + "/MNB_" + ent + ".pickle","rb")
     MNB = pickle.load(MNB_F)
