@@ -350,7 +350,6 @@ Part of speech tag          & The part of speech identified by a PoS tagger     
 Previous 3 tokens           & The 3 tokens to come previously in the text, blank if no more words before it & “",“two", “red"                       \\ \hline
 Previous 3 token labels     & The labels given by the model the previous 3 tokens                           & “",“o",“o"                            \\ \hline
 Next 3 tokens               & The 3 token to come next in the text, blank of no more words after            & “went",“down",“the"                   \\ \hline
-Presence in Wordnet as noun & Does Wordnet list the token as an object or size?                             & “True"                                \\ \hline
 Contains numbers            & Does the token contain numerical characters?                                  & “False"                               \\ \hline
 Contains a unit of size     & Does the token contain a unit of size from a predefined list of units?        & “False"                               \\ \hline
 Sub-tokens                    & If the token contains numbers and letters, seperate them into seperate tokens  & “3",“m"                                \\ \hline
@@ -446,122 +445,227 @@ All the subsequent tests were completed on the same training and testing dataset
 
 \section{Named Entity Recognition}
 
+\begin{longtable}[c]{|l|c|c|c|c|}
+\caption{The features within each feature set}
+\label{tab:ner_features_sets}\\
+\hline
+\textbf{Feature}        & \multicolumn{1}{l|}{\textbf{Set 1}} & \multicolumn{1}{l|}{\textbf{Set 2}} & \multicolumn{1}{l|}{\textbf{Set 3}} & \multicolumn{1}{l|}{\textbf{Set 4}} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+Token/word in lowercase & \textbf{X}                          & \textbf{X}                          & \textbf{X}                          & \textbf{X}                          \\ \hline
+Stemmed token           & \textbf{X}                          & \multicolumn{1}{l|}{}               & \textbf{X}                          & \textbf{X}                          \\ \hline
+Shape                   & \textbf{X}                          & \textbf{X}                          & \textbf{X}                          & \textbf{X}                          \\ \hline
+Part of speech tag      & \textbf{X}                          & \textbf{X}                          & \textbf{X}                          & \textbf{X}                          \\ \hline
+Previous 3 tokens       & \textbf{X}                          & \textbf{X}                          & \multicolumn{1}{l|}{}               & \textbf{X}                          \\ \hline
+Previous 3 token labels & \textbf{X}                          & \textbf{X}                          & \multicolumn{1}{l|}{}               & \textbf{X}                          \\ \hline
+Next 3 tokens           & \textbf{X}                          & \textbf{X}                          & \multicolumn{1}{l|}{}               & \textbf{X}                          \\ \hline
+Contains numbers        & \textbf{X}                          & \textbf{X}                          & \textbf{X}                          & \multicolumn{1}{l|}{}               \\ \hline
+Contains a unit of size & \textbf{X}                          & \textbf{X}                          & \textbf{X}                          & \multicolumn{1}{l|}{}               \\ \hline
+Sub-tokens              & \textbf{X}                          & \textbf{X}                          & \textbf{X}                          & \multicolumn{1}{l|}{}               \\ \hline
+\end{longtable}
+
+All of these features sets were tested on each model both with preprocessing and without. Feature sets 1 - 4 have been tested both with and without preprecessing applied.
+
 \begin{longtable}{|l|l|l|l|l|}
-\caption{Models performance on feature set 1 for named entity recognition}
+\caption{Models performance on feature set 1 with preprocessing for named entity recognition}
 \label{tab:ner_feature_set_1}\\
 \hline
-\textbf{Model}          & \multicolumn{1}{c|}{\textbf{Precision}} & \multicolumn{1}{c|}{\textbf{Recall}} & \textbf{F1} & \textbf{F1 Variance} \\ \hline
+\textbf{Model}          & \multicolumn{1}{c|}{\textbf{Precision}} & \multicolumn{1}{c|}{\textbf{Recall}} & \textbf{F1}  \\ \hline
 \endfirsthead
 %
 \endhead
 %
-Multinomial Naive Bayes & \multicolumn{1}{c|}{}                   & \multicolumn{1}{c|}{}                &             &                      \\ \hline
-Bernoulli Naive Bayes       &  &  &  &  \\ \hline
-Logistic Regression         &  &  &  &  \\ \hline
-Stochastic Gradient Descent &  &  &  &  \\ \hline
-Support Vector              &  &  &  &  \\ \hline
-Linear Support Vector       &  &  &  &  \\ \hline
-Nu-Support Vector (0.3)     &  &  &  &  \\ \hline
-Nu-Support Vector (0.5)     &  &  &  &  \\ \hline
-Nu-Support Vector (0.7)     &  &  &  &  \\ \hline
-Combined Voting             &  &  &  &  \\ \hline
+Multinomial Naive Bayes & 0.66  &  0.70   &  0.63   \\ \hline
+Bernoulli Naive Bayes       & 0.27 & 0.49 & 0.34   \\ \hline
+Logistic Regression         & 0.79 & 0.73 & 0.69   \\ \hline
+Stochastic Gradient Descent & 0.81 & 0.76 & 0.76   \\ \hline
+Support Vector              & 0.14 & 0.38 & 0.21  \\ \hline
+Linear Support Vector       & 0.84 & 0.81 & 0.82  \\ \hline
+Combined Voting             & 0.82 & 0.76 & 0.72  \\ \hline
 \end{longtable}
 
 \begin{longtable}{|l|l|l|l|l|}
-\caption{Models performance on feature set 2 for named entity recognition}
+\caption{Models performance on feature set 2 with preprocessing for named entity recognition}
 \label{tab:ner_feature_set_2}\\
 \hline
-\textbf{Model}          & \multicolumn{1}{c|}{\textbf{Precision}} & \multicolumn{1}{c|}{\textbf{Recall}} & \textbf{F1} & \textbf{F1 Variance} \\ \hline
+\textbf{Model}          & \multicolumn{1}{c|}{\textbf{Precision}} & \multicolumn{1}{c|}{\textbf{Recall}} & \textbf{F1} \\ \hline
 \endfirsthead
 %
 \endhead
 %
-Multinomial Naive Bayes & \multicolumn{1}{c|}{}                   & \multicolumn{1}{c|}{}                &             &                      \\ \hline
-Bernoulli Naive Bayes       &  &  &  &  \\ \hline
-Logistic Regression         &  &  &  &  \\ \hline
-Stochastic Gradient Descent &  &  &  &  \\ \hline
-Support Vector              &  &  &  &  \\ \hline
-Linear Support Vector       &  &  &  &  \\ \hline
-Nu-Support Vector (0.3)     &  &  &  &  \\ \hline
-Nu-Support Vector (0.5)     &  &  &  &  \\ \hline
-Nu-Support Vector (0.7)     &  &  &  &  \\ \hline
-Combined Voting             &  &  &  &  \\ \hline
+Multinomial Naive Bayes &  0.59  & 0.70  & 0.62 \\ \hline
+Bernoulli Naive Bayes       & 0.56 & 0.62 & 0.53   \\ \hline
+Logistic Regression         & 0.79 & 0.78 & 0.74  \\ \hline
+Stochastic Gradient Descent & 0.84 & 0.81 & 0.81  \\ \hline
+Support Vector              & 0.19 & 0.43 & 0.26  \\ \hline
+Linear Support Vector       & 0.85 & 0.84 & 0.84  \\ \hline
+Combined Voting             & 0.79 & 0.78 & 0.74  \\ \hline
 \end{longtable}
 
-\begin{longtable}[c]{|l|l|l|l|l|}
+\begin{longtable}{|l|l|l|l|l|}
+\caption{Models performance on feature set 3 with preprocessing for named entity recognition}
+\label{tab:ner_feature_set_3}\\
+\hline
+\textbf{Model}          & \multicolumn{1}{c|}{\textbf{Precision}} & \multicolumn{1}{c|}{\textbf{Recall}} & \textbf{F1} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+Multinomial Naive Bayes &  0.48  & 0.59  & 0.50   \\ \hline
+Bernoulli Naive Bayes       & 0.48 & 0.59 & 0.50   \\ \hline
+Logistic Regression         & 0.53 & 0.62 & 0.54  \\ \hline
+Stochastic Gradient Descent & 0.77 & 0.65 & 0.60  \\ \hline
+Support Vector              &  0.11 & 0.32 & 0.16  \\ \hline
+Linear Support Vector       & 0.53 & 0.65 & 0.57  \\ \hline
+Combined Voting             & 0.53 & 0.62 & 0.54   \\ \hline
+\end{longtable}
+
+\begin{longtable}{|l|l|l|l|l|}
+\caption{Models performance on feature set 4 with preprocessing for named entity recognition}
+\label{tab:ner_feature_set_4}\\
+\hline
+\textbf{Model}          & \multicolumn{1}{c|}{\textbf{Precision}} & \multicolumn{1}{c|}{\textbf{Recall}} & \textbf{F1} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+Multinomial Naive Bayes &  0.77  & 0.70  & 0.65  \\ \hline
+Bernoulli Naive Bayes       & 0.27 & 0.51 & 0.35   \\ \hline
+Logistic Regression         & 0.82 & 0.78 & 0.76   \\ \hline
+Stochastic Gradient Descent & 0.80 & 0.73 & 0.73   \\ \hline
+Support Vector              & 0.21 & 0.46 & 0.29   \\ \hline
+Linear Support Vector       & 0.76 & 0.76 & 0.74   \\ \hline
+Combined Voting             & 0.82 & 0.78 & 0.76   \\ \hline
+\end{longtable}
+
+\begin{longtable}{|l|l|l|l|l|}
+\caption{Models performance on feature set 1 without preprocessing for named entity recognition}
+\label{tab:ner_feature_set_5}\\
+\hline
+\textbf{Model}          & \multicolumn{1}{c|}{\textbf{Precision}} & \multicolumn{1}{c|}{\textbf{Recall}} & \textbf{F1} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+Multinomial Naive Bayes &  0.76  & 0.83  & 0.79  \\ \hline
+Bernoulli Naive Bayes       & 0.69 & 0.79 & 0.72   \\ \hline
+Logistic Regression         & 0.79 & 0.85 & 0.82   \\ \hline
+Stochastic Gradient Descent & 0.83 & 0.83 & 0.82   \\ \hline
+Support Vector              & 0.51 & 0.71 & 0.59   \\ \hline
+Linear Support Vector       & 0.82 & 0.85 & 0.83   \\ \hline
+Combined Voting             & 0.77 & 0.83 & 0.80   \\ \hline
+\end{longtable}
+
+\begin{longtable}{|l|l|l|l|l|}
+\caption{Models performance on feature set 2 without preprocessing for named entity recognition}
+\label{tab:ner_feature_set_6}\\
+\hline
+\textbf{Model}          & \multicolumn{1}{c|}{\textbf{Precision}} & \multicolumn{1}{c|}{\textbf{Recall}} & \textbf{F1} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+Multinomial Naive Bayes &  0.80  & 0.86  & 0.82       \\ \hline
+Bernoulli Naive Bayes       & 0.57 & 0.67 & 0.57   \\ \hline
+Logistic Regression         & 0.78 & 0.83 & 0.79   \\ \hline
+Stochastic Gradient Descent & 0.86 & 0.83 & 0.84   \\ \hline
+Support Vector              & 0.35 & 0.59 & 0.44   \\ \hline
+Linear Support Vector       & 0.87 & 0.86 & 0.86   \\ \hline
+Combined Voting             & 0.78 & 0.85 & 0.80   \\ \hline
+\end{longtable}
+
+\begin{longtable}{|l|l|l|l|l|}
+\caption{Models performance on feature set 3 without preprocessing for named entity recognition}
+\label{tab:ner_feature_set_7}\\
+\hline
+\textbf{Model}          & \multicolumn{1}{c|}{\textbf{Precision}} & \multicolumn{1}{c|}{\textbf{Recall}} & \textbf{F1} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+Multinomial Naive Bayes &  0.90  & 0.89  & 0.89      \\ \hline
+Bernoulli Naive Bayes       & 0.76 & 0.86 & 0.81   \\ \hline
+Logistic Regression         & 0.89 & 0.91 & 0.90  \\ \hline
+Stochastic Gradient Descent & 0.91 & 0.89 & 0.90   \\ \hline
+Support Vector              & 0.62 & 0.79 & 0.69   \\ \hline
+Linear Support Vector       & 0.92 & 0.92 & 0.92   \\ \hline
+Combined Voting             & 0.89 & 0.91 & 0.90   \\ \hline
+\end{longtable}
+
+\begin{longtable}{|l|l|l|l|l|}
+\caption{Models performance on feature set 4 without preprocessing for named entity recognition}
+\label{tab:ner_feature_set_8}\\
+\hline
+\textbf{Model}          & \multicolumn{1}{c|}{\textbf{Precision}} & \multicolumn{1}{c|}{\textbf{Recall}} & \textbf{F1} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+Multinomial Naive Bayes &  0.66  & 0.76  & 0.70     \\ \hline
+Bernoulli Naive Bayes       & 0.62 & 0.73 & 0.64  \\ \hline
+Logistic Regression         & 0.80 & 0.83 & 0.79  \\ \hline
+Stochastic Gradient Descent & 0.86 & 0.83 & 0.83  \\ \hline
+Support Vector              & 0.46 & 0.68 & 0.55  \\ \hline
+Linear Support Vector       & 0.90 & 0.89 & 0.87  \\ \hline
+Combined Voting             & 0.82 & 0.86 & 0.83  \\ \hline
+\end{longtable}
+
+\begin{longtable}[c]{|l|l|l|}
 \caption{Preprocessing F1 averages for all models on different feature sets}
 \label{tab:ner_preprocessing}\\
 \hline
-\textbf{\begin{tabular}[c]{@{}l@{}}Feature \\ Set\end{tabular}} & \multicolumn{1}{c|}{\textbf{None}} & \multicolumn{1}{c|}{\textbf{S}} & \multicolumn{1}{c|}{\textbf{L}} & \multicolumn{1}{c|}{\textbf{S, L}} \\ \hline
+\textbf{\begin{tabular}[c]{@{}l@{}}Feature \\ Set\end{tabular}} & \textbf{Preprocessing} & \textbf{\begin{tabular}[c]{@{}l@{}}No\\ Preprocessing\end{tabular}} \\ \hline
 \endfirsthead
 %
 \endhead
 %
-1                                                               & \multicolumn{1}{c|}{}              & \multicolumn{1}{c|}{}           &                                 &                                    \\ \hline
-2                                                               &                                    &                                 &                                 &                                    \\ \hline
-3                                                               &                                    &                                 &                                 &                                    \\ \hline
+1 & 0.60 & 0.77 \\ \hline
+2 & 0.65 & 0.73 \\ \hline
+3 & 0.49 & 0.86 \\ \hline
+4 & 0.61 & 0.74 \\ \hline
 \end{longtable}
 
 \section{Relationship Extraction}
 
-These tests were performed on labelled entity information not from sentences labelled by the name named entity recognition model.
+These tests were performed on labelled entity information not from sentences labelled by the named entity recognition model. Due to the small number of features used, only one set was tested.
 
 \begin{longtable}{|l|l|l|l|l|}
-\caption{Models performance on feature set 1 for relationship extraction}
+\caption{Models performance with preprocessing for relationship extraction}
 \label{tab:re_feature_set_1}\\
 \hline
-\textbf{Model}          & \multicolumn{1}{c|}{\textbf{Precision}} & \multicolumn{1}{c|}{\textbf{Recall}} & \textbf{F1} & \textbf{F1 Variance} \\ \hline
+\textbf{Model}          & \multicolumn{1}{c|}{\textbf{Precision}} & \multicolumn{1}{c|}{\textbf{Recall}} & \textbf{F1} \\ \hline
 \endfirsthead
 %
 \endhead
 %
-Multinomial Naive Bayes & \multicolumn{1}{c|}{}                   & \multicolumn{1}{c|}{}                &             &                      \\ \hline
-Bernoulli Naive Bayes       &  &  &  &  \\ \hline
-Logistic Regression         &  &  &  &  \\ \hline
-Stochastic Gradient Descent &  &  &  &  \\ \hline
-Support Vector              &  &  &  &  \\ \hline
-Linear Support Vector       &  &  &  &  \\ \hline
-Nu-Support Vector (0.3)     &  &  &  &  \\ \hline
-Nu-Support Vector (0.5)     &  &  &  &  \\ \hline
-Nu-Support Vector (0.7)     &  &  &  &  \\ \hline
-Combined Voting             &  &  &  &  \\ \hline
+Multinomial Naive Bayes &  0.66  & 0.69  & 0.66  \\ \hline
+Bernoulli Naive Bayes       & 0.83 & 0.77 & 0.72  \\ \hline
+Logistic Regression         & 0.83 & 0.77 & 0.72  \\ \hline
+Stochastic Gradient Descent & 0.48 & 0.69 & 0.57  \\ \hline
+Support Vector              & 0.48 & 0.69 & 0.57  \\ \hline
+Linear Support Vector       & 0.66 & 0.69 & 0.66  \\ \hline
+Combined Voting             & 0.83 & 0.77 & 0.72  \\ \hline
 \end{longtable}
 
 \begin{longtable}{|l|l|l|l|l|}
-\caption{Models performance on feature set 2 for relationship extraction}
+\caption{Models performance without preprocessing for relationship extraction}
 \label{tab:re_feature_set_2}\\
 \hline
-\textbf{Model}          & \multicolumn{1}{c|}{\textbf{Precision}} & \multicolumn{1}{c|}{\textbf{Recall}} & \textbf{F1} & \textbf{F1 Variance} \\ \hline
+\textbf{Model}          & \multicolumn{1}{c|}{\textbf{Precision}} & \multicolumn{1}{c|}{\textbf{Recall}} & \textbf{F1} \\ \hline
 \endfirsthead
 %
 \endhead
 %
-Multinomial Naive Bayes & \multicolumn{1}{c|}{}                   & \multicolumn{1}{c|}{}                &             &                      \\ \hline
-Bernoulli Naive Bayes       &  &  &  &  \\ \hline
-Logistic Regression         &  &  &  &  \\ \hline
-Stochastic Gradient Descent &  &  &  &  \\ \hline
-Support Vector              &  &  &  &  \\ \hline
-Linear Support Vector       &  &  &  &  \\ \hline
-Nu-Support Vector (0.3)     &  &  &  &  \\ \hline
-Nu-Support Vector (0.5)     &  &  &  &  \\ \hline
-Nu-Support Vector (0.7)     &  &  &  &  \\ \hline
-Combined Voting             &  &  &  &  \\ \hline
+Multinomial Naive Bayes &  &  &   \\ \hline
+Bernoulli Naive Bayes       &  &  &   \\ \hline
+Logistic Regression         &  &  &   \\ \hline
+Stochastic Gradient Descent &  &  &   \\ \hline
+Support Vector              &  &  &   \\ \hline
+Linear Support Vector      &  &  &   \\ \hline
+Combined Voting             &  &  &   \\ \hline
 \end{longtable}
-
-\begin{longtable}[c]{|l|l|l|l|l|}
-\caption{Preprocessing F1 averages for all models on different feature sets}
-\label{tab:re_preprocessing}\\
-\hline
-\textbf{\begin{tabular}[c]{@{}l@{}}Feature \\ Set\end{tabular}} & \multicolumn{1}{c|}{\textbf{None}} & \multicolumn{1}{c|}{\textbf{S}} & \multicolumn{1}{c|}{\textbf{L}} & \multicolumn{1}{c|}{\textbf{S, L}} \\ \hline
-\endfirsthead
-%
-\endhead
-%
-1                                                               & \multicolumn{1}{c|}{}              & \multicolumn{1}{c|}{}           &                                 &                                    \\ \hline
-2                                                               &                                    &                                 &                                 &                                    \\ \hline
-3                                                               &                                    &                                 &                                 &                                    \\ \hline
-\end{longtable}
-
 
 \section{Named Entity Recognition and Relationship Extraction}
 

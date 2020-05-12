@@ -77,8 +77,9 @@ def get_model_f1_score(model, testing_set, model_name, logfile):
         y_true.append(label)
         y_pred.append(observed)
 
+    print("\n###\n" + model_name)
     print(classification_report(y_true, y_pred))
-    logfile.write(classification_report(y_true, y_pred))
+    logfile.write("\n###\n" + model_name + "\n" + classification_report(y_true, y_pred))
     
 
 def train(labelled_features_file, test_name, ent):
@@ -203,7 +204,7 @@ def train(labelled_features_file, test_name, ent):
     with open("tests/" + test_name + '/LinearSVC_' + ent + '.pickle', 'wb+') as f:
         pickle.dump(LinearSVC_classifier, f)
 
-    # NuSVC_classifier = SklearnClassifier(NuSVC())
+    # NuSVC_classifier = SklearnClassifier(NuSVC(nu=0.2))
     # NuSVC_classifier.train(training_set)
     # with open("tests/" + test_name + '/NuSVC_' + ent + '.pickle', 'wb+') as f:
     #     pickle.dump(NuSVC_classifier, f)
@@ -214,9 +215,8 @@ def train(labelled_features_file, test_name, ent):
 def test(labelled_features_file, test_name, ent, testing_set):
     # inputFile = open(labelled_features_file[:-4] + ".pickle","rb")
     # featuresets = pickle.load(inputFile)
-    # inputFile.close()
-
-    test_log = open("tests/" + test_name + "/test_log_" + ent + ".txt", "w+")
+    # inputFile.close() 
+    test_log = open("tests/" + test_name + "/test_log_" + ent + "_" + labelled_features_file[-5:-4] + ".txt", "w+")
 
     # print(len(featuresets))
             
