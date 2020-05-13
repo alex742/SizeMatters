@@ -33,12 +33,12 @@ def getCandidateSentences(input_file, output_file):
                 #candidatesUnits.write(sentence + "\n")
             else:
                 pass
-                # tagged_sentence = pos_tag(word_tokenize(sentence))
-                # for word, tag in tagged_sentence:
-                #     # NN (Noun), NNS (Nouns), NNP (Proper Noun), NNPS (Proper Nouns)
-                #     if 'NN' in tag:
-                #         candidates.write(sentence + "\n")
-                #         break
+                tagged_sentence = pos_tag(word_tokenize(sentence))
+                for word, tag in tagged_sentence:
+                    # NN (Noun), NNS (Nouns), NNP (Proper Noun), NNPS (Proper Nouns)
+                    if 'NN' in tag:
+                        candidates.write(sentence + "\n")
+                        break
         if line_count % 10000 == 0:
             print(line_count / 10000)
 
