@@ -67,6 +67,9 @@ All sentences or passages quoted in this document from other people's work have 
 
 Size estimation of an object is a task that humans can perform easily but struggle to explain the process of. It is common sense to be able to estimate the size of an object. This dissertation project aims to create a database of objects with their commonly found sizes to assist software in being able to make these same estimates. The project will achieve this by using information extraction techniques to find written examples of object's sizes. The final system will use named entity recognition and relationship extraction to obtain this information from a text source.
 
+\chapter*{COVID-19 Impact Statement}
+The lockdown imposed because of COVID-19 caused additional challenges for the completion of this project. In the second semester of the project, the university switched to online delivery of all teaching, and university buildings were closed. All project meetings were shifted to email correspondence and video meetings.
+
 % -------------------------------------------------------------------
 % Contents, list of figures, list of tables
 % -------------------------------------------------------------------
@@ -123,7 +126,7 @@ Finally, there will be a discussion and conclusion about the projects aims and f
 There has not been much previous work done on this topic, but each of the individual aspects of the project has been researched in depth by other parties. The majority of the project is an information extraction task which has been widely researched with many techniques to perform well on various forms of data. Other considerations to be made will be what tools or programming languages to use, and how to store both the training data and the results.
 
 \section{Information Extraction}
-The information extraction task can be broken down into two parts, named entity recognition and relationship extraction. The difference in these two tasks would be indentifying the objects and sizes within the sentence, and then determining if they are related. For example, with the sentence “Beech trees can grow to more than 40m.”, named entity recognition is the task of identifying “Beech trees” as an object and “40m” as a size. Relationship extraction is the task of determining whether the size is a description of the object i.e. whether they are related. This section will overview the problem, different techniques for the tasks, their advantages, and their disadvantages.
+The information extraction task can be broken down into two parts, named entity recognition and relationship extraction. The difference in these two tasks would be identifying the objects and sizes within the sentence, and then determining if they are related. For example, with the sentence “Beech trees can grow to more than 40m.”, named entity recognition is the task of identifying “Beech trees” as an object and “40m” as a size. Relationship extraction is the task of determining whether the size is a description of the object i.e. whether they are related. This section will overview the problem, different techniques for the tasks, their advantages, and their disadvantages.
 
 \subsection{Named Entity Recognition}
 
@@ -141,7 +144,10 @@ Supervised learning is a technique that attempts to fix the generalisation probl
 
 \subsubsection{Semi-Supervised Learning}
 
-Semi-supervised learning is a similar approach to supervised, but the advantage is that you don’t need as many labelled examples in your training data \citep{intro_to_semi}. You have a small amount of labelled data as part of a larger unlabelled training data set. Using the labelled examples and by looking at the structure of the unlabelled data you attempt to form a model, you are relying on assumptions that either points close to one another share a class, points within a cluster share the same class, or the classes can be inferred by patterns hidden on a lower dimension than the input space \citep{semi-supervised_learning}.
+Semi-supervised learning is a similar approach to supervised, but the advantage is that you do not need as many labelled examples in your training data \citep{intro_to_semi}. You have a small amount of labelled data as part of a larger unlabelled training data set. Using the labelled examples and by looking at the structure of the unlabelled data you attempt to form a model, you are relying on assumptions that either points close to one another share a class, points within a cluster share the same class, or the classes can be inferred by patterns hidden on a lower dimension than the input space \citep{semi-supervised_learning}.
+
+\subsubsection{Active Learning}
+Active learning is similar to semi-supervised in that you start with a small amount of labelled data that allows the model to begin making classifications. Where it differs is that before the model feeds it's classifications back into the training data, there is a manual intervention step where a human will verify the classification results. This is done to reduce semantic drift and help generate large amounts of training data more easily without sacrificing performance \citep{semi_vs_active}.
 
 \subsection{Relationship Extraction}
 
@@ -183,15 +189,15 @@ The advantages of this is the reduced need to label training data and the speed 
 
 \subsection{Feature Selection}
 
-Machine learning models use features to inform themselves about the context in which the information has been found. For example, information such as if the word is in a dictionary, if the word is capitalised, and what the preceding and succeeding words are, could all be informative in determining if an entity is a person. Without features the model would have to see every example of a person entity in text to be able to classify them, essentially making it a fancy look up table. Features allow the model to identify new contexts as simlar to previous examples it has encountered and make a classification based on that similarity.
+Machine learning models use features to inform themselves about the context in which the information has been found. For example, information such as if the word is in a dictionary, if the word is capitalised, and what the preceding and succeeding words are, could all be informative in determining if an entity is a person. Without features the model would have to see every example of a person entity in text to be able to classify them, essentially making it a fancy look up table. Features allow the model to identify new contexts as similar to previous examples it has encountered and make a classification based on that similarity.
 
 For the sake of computational efficiency and reducing the complexity of the model, the number of features should be kept low. This generally also increases the accuracy of the model by removing features that are not informative or are even misleading (\citet{feature_selection}, \citet{less_features_good}).
 
 \subsection{Preprocessing}
-Preprocessing is the process of analysing, editing, or removing text from the data to allow the model to more accurately classify. Some of the processes proved to be useful in text mining and information extraction \citep{preprocessing} are stop-word removal and stemming. Stop-word removal is the removal of words that add little information to the text. These are words that are commonly used and do not inform the classifier about the specific situation in any great way. Stemming is the process of removing the ends of words and reducing them to their root form. This usually helps the model learn faster as it does not have to learn different endings for a word that all essentially mean the same thing i.e. “car” and “cars” will both be written as “car” and it likely will not effect the meaning of the text. Both of these processes have been shown to work well with various text mining and text related tasks, however they may not perform well with this specific named entity recognition and relationship extraction task. 
+Preprocessing is the process of analysing, editing, or removing text from the data to allow the model to classify more accurately. Some of the processes proved to be useful in text mining and information extraction \citep{preprocessing} are stop-word removal and stemming. Stop-word removal is the removal of words that add little information to the text. These are words that are commonly used and do not inform the classifier about the specific situation in any great way. Stemming is the process of removing the ends of words and reducing them to their root form. This usually helps the model learn faster as it does not have to learn different endings for a word that all essentially mean the same thing i.e. “car” and “cars” will both be written as “car” and it likely will not affect the meaning of the text. Both of these processes have been shown to work well with various text mining and text related tasks, however they may not perform well with this specific named entity recognition and relationship extraction task. 
 
 \subsection{Labelling Scheme}
-Training the models requires labelled examples of data similar to that which they will be classifying. A common way of labelling for named entity recognition is the BIO scheme \citep{bio}. BIO stands for Beginning-Inside-Outside, as this is how it labels tokens. For example the following sentence would be labelled as:
+Training the models requires labelled examples of data similar to that which they will be classifying. A common way of labelling for named entity recognition is the BIO scheme \citep{bio}. BIO stands for Beginning-Inside-Outside, as this is how it labels tokens. For example, the following sentence would be labelled as:
 
 \begin{displayquote}
 “Granny Smith Apples are 6cm in diameter." \\
@@ -226,39 +232,27 @@ Precision is the measure of how many classifications made by the model are corre
 
 \chapter{Requirements and analysis}
 
-The primary objective of the project is to generate a machine learning model that is able to detect related objects and sizes in text. This can be broken down into a number of smaller aims and objectives as shown below (in chronological order):
+The primary objective of the project is to generate a machine learning model that is able to detect related objects and sizes in text. This can be broken down into a number of smaller aims and objectives as shown below:
 
 \begin{enumerate}
 \item Build a data labelling tool
 \item Find a suitable text data source
-\item NER model v1
-\begin{enumerate}
-\item Build NER model v1 using PoS tagging, Wordnet, regular expressions to identify candidate sentences which can then be manually labelled
-\item Label data found with NER model v1
-\item Build NER model v2 to identify objects and sizes in text using machine learning and data found from NER model v1
-\end{enumerate}
-\item NER Model v2
-\begin{enumerate}
-\item Build RE model v1 to determine if an object and size in text are related using machine learning
-\item Build a feedback loop tool to relabel incorrect classifications
-\item Correct NER model v2 and RE model v1 classifications and feedback into training data
-\end{enumerate}
-\item Create database to store data
-\item Use previous found instances of same objects to inform decision
-\item Use object hierarchy to inform decision
+\item Label text data
+\item Build and train NER and RE model
+\item Evaluate models
+\item Build database
+\item Retrain models on new data
 \end{enumerate}
 
-Objective 5 marks the end goal of the project from a definition standpoint. Reaching this objective would mean that the project will have implemented the minimum requirements. The models might not be accurate, and the data might be poor, but a database of objects and their relative sizes will have been built using machine learning. Objectives 6 and 7 are additional steps that could help improve the accuracy of the model. These go alongside objectives 3.3 and 4.1, a model can quickly be built as a proof of concept initially, however improving the features used and the quality and quantity of the data can drastically change the outcome of the project.
-
-Objective 3.3 has a caveat, building a machine learning model to identify sizes might not be time efficient. Depending on the results of the regular expressions in objective 3.1 it might be more effective to stick with this approach and focus on the more difficult task of identifying objects. This is due to the simple nature of sizes, all sizes contain a unit, of which there are a limited number, and all sizes all contain a numeric value. Both these things are easily picked up by a regular expression.
+Objective 6 marks the end goal of the project from a definition standpoint. Reaching this objective would mean that the project will have implemented the minimum requirements. The models might not be accurate, and the data might be poor, but a database of objects and their relative sizes can be built using the models to classify new data. Objective 7 is an additional step that could help improve the accuracy of the model. This goes alongside 4 and 5 where improving the features or models used could drastically change the outcome of the project.
 
 There is also an extension to this project that would be to include sizes of objects relative to others. For example, “That tree is as tall as a house.”, if you know the size of a house from previous text then you can infer that some trees are equal to this height.
 
-The evaluation of the project’s success will be difficult to measure. Testing the machine learning models using the labelled training data is an easy enough task. However, how the training data is gathered might skew our models. This means that although it might perform well on the test set, we need to ensure that the test set is an accurate representation of the real text we’re trying to extract information from. We can limit the gap by trying to include examples of all classifications. Sentences with just objects, just sizes, both objects and sizes, sentences where the object and size are related and sentences where they are not. The means that the model will have an accurate representation of all different possibilities.
+The evaluation of the project’s success will be difficult to measure. Testing the machine learning models using the labelled training data is an easy enough task. However, how the training data is gathered might skew our models. This means that although it might perform well on the test set, we need to ensure that the test set is an accurate representation of the real text we are trying to extract information from. We can limit the gap by trying to include examples of all classifications. Sentences with just objects, just sizes, both objects and sizes, sentences where the object and size are related and sentences where they are not. The means that the model will have an accurate representation of all different possibilities.
 
 \section{Information Extraction}
 
-Semi-supervised learning is the technique that this project will employ in order to train models. This is due to the limited time in which the project must be completed, as well as a lack of readily available datasets that would be helpful for this task. It is a good compromise between supervised and unsupervised learning.
+Active learning is the technique that this project will employ in order to train models. This is due to the limited time in which the project must be completed, as well as a lack of readily available datasets that would be helpful for this task. It is a good compromise between supervised and semi-supervised learning.
 
 Other approaches for information extraction such as knowledge-engineering could be a good fit for certain aspects of this project such as recognising sizes. Knowledge-engineering techniques approach the problem by using domain experts to write rules to capture the information. Rules for objects such as sizes could be as follows: The token must contain a unit of size (metres, m, ft, inches, etc), and the token must contain a numeric value (a scale of the size).
 
@@ -272,18 +266,18 @@ Choosing the features for information extraction to inform the model is a challe
 \label{fig:feature_set}
 \end{figure}
 
-From \citet{many_features} we can see the how effective many different features are on the performance of named entity recognition models. Some of the features that performed well in the paper such as suffixes and prefixes most likely won't improve the performance of our models due to objects not commonly having prefixes and suffixes. However features such as sub-tokens could be adapted to help identify units of size. The paper also goes into depth about different forms of clustering and how they can be used to help inform the model. Clustering is useful as its allows better generalisation to previously unseen words, as they can be assigned to a cluster of semantically similar words and then classified using the clusters information \citep{phrasecluster}.
+From \citet{many_features} we can see the how effective many different features are on the performance of named entity recognition models. Some of the features that performed well in the paper such as suffixes and prefixes most likely will not improve the performance of our models due to objects not commonly having prefixes and suffixes. However, features such as sub-tokens could be adapted to help identify units of size. The paper also goes into depth about different forms of clustering and how they can be used to help inform the model. Clustering is useful as it allows better generalisation to previously unseen words, as they can be assigned to a cluster of semantically similar words and then classified using the clusters information \citep{phrasecluster}.
 
-\citet{refeatures} discusses the important of features in a relationship extraction task. It lays out 5 important features: the entities themselves, the types of the two entities, word sequence between the entities, number of words between the entities, and then path in the parse tree containing the two entities. For our project the types of the two entities is irrelevent as we will only be classifying sentences containing an object and a size entity.
+\citet{refeatures} discusses the important of features in a relationship extraction task. It lays out 5 important features: the entities themselves, the types of the two entities, word sequence between the entities, number of words between the entities, and then path in the parse tree containing the two entities. For our project, the types of the two entities is irrelevant as we will only be classifying sentences containing an object and a size entity.
 
 \subsection{Preprocessing}
-Due to the nature of the task, preprocessing the data may actually be detrimental to results. For example when attempting to classify a relationship between two entities it is likely that the only words between them will be stop words. Removing them in preprocessing actually may hinder the performance of the model as it will have less contextual information on which to make its classification. However this project will test the effectiveness of stop-word removal as well as lemmatisation on the performance of the models. Stemming has been left out as it will be used as a feature rather than a preproccessing technique. This is due to the similarity between lemmatisation and stemming, and wanting to test the effects stemming has as a feature.
+Due to the nature of the task, preprocessing the data may actually be detrimental to results. For example, when attempting to classify a relationship between two entities it is likely that the only words between them will be stop words. Removing them in preprocessing actually may hinder the performance of the model as it will have less contextual information on which to make its classification. However, this project will test the effectiveness of stop-word removal as well as lemmatisation on the performance of the models. Stemming has been left out as it will be used as a feature rather than a preproccessing technique. This is due to the similarity between lemmatisation and stemming and wanting to test the effects stemming has as a feature.
 
 \subsection{Labelling Data}
-Once the raw text data has been acquired from our data source we will need to process and label it. The labelling process will be made easier by the creation of a labelling tool that will allow us to label entities using the BIO scheme as well as labelling the entities as having relationships or not. To properly evaluate the performance of the models a minimum number of labelled examples are needed for both sizes, objects, and relationships.  Named entity recognition has been shown to perform at expert levels with less than 100 labelled examples \citep{not_many_training_ner}, so the minimum requirement for our project will be set at 100. Relationship extraction... \\ ... \\ ... \\ ... \\ ...
+Once the raw text data has been acquired from our data source we will need to process and label it. The labelling process will be made easier by the creation of a labelling tool that will allow us to label entities using the BIO scheme as well as labelling the entities as having relationships or not. This will also allow us to be able to classify multi-token entities as well as single word so we can generalise to a wider range of examples that our model will be able to classify. To properly evaluate the performance of the models a minimum number of labelled examples are needed for both sizes, objects, and relationships.  Named entity recognition has been shown to perform at expert levels with less than 100 labelled examples \citep{not_many_training_ner}, so the minimum requirement for our project will be set at 100. There has not been much literature on relationship extraction with a limited number of training records, so it is hard to estimate our requirement for implementing this project. In light of this we will perform tests to study the effects the number of records has on the performance of our models. 
 
 \section{Programming Languages}
-Despite the faster run time of Java and existence of the StanfordNLP library, for machine learning and data science, Python has the advantage. There are a significant number of libraries that will allow the implementation of this project to be much more efficient. Also despite Python running more slowly, once the models are trained the processing time of classifying a token or relationship is small enough that it will not be an issue.
+Despite the faster run time of Java and existence of the StanfordNLP library, for machine learning and data science, Python has the advantage. There are a significant number of libraries that will allow the implementation of this project to be much more efficient. Also, despite Python running more slowly, once the models are trained the processing time of classifying a token or relationship is small enough that it will not be an issue.
 
 \section{Datasets}
 The most readily available dataset that is likely to contain information on object size would be Wikipedia. English Wikipedia can be downloaded into an xml file of just over 60GB. Due to the nature of Wikipedia and the type of information it contains it is a good candidate for our primary text dataset. As it is used for educational purposes, sentences describing objects should be more common than in other text datasets.
@@ -291,12 +285,12 @@ The most readily available dataset that is likely to contain information on obje
 Another dataset that could be used to improve the performance of named entity recognition is Wordnet. Wordnet is a large lexical database of English and could be used as a gazetteer to identify entities that are objects. Wordnet will also allow the identification of multiple references to the same object as it lists alternative words for the same noun object.
 
 \section{Databases}
-The database for this project will be relatively simple and can be created using SQL, specifically MySQL it can be easily intergrated with Python. Database design guidelines explain the importance of normalising the tables to ensure that information is not stored multiple times. In the case of this project all we need to store is a reference to an object,a list of found sizes, and a link back to where each relationship was found, which is why we prefer this method over a NoSQL approach.
+The database for this project will be relatively simple and can be created using SQL, specifically MySQL it can be easily integrated with Python. Database design guidelines explain the importance of normalising the tables to ensure that information is not stored multiple times. In the case of this project all we need to store is a reference to an object, a list of found sizes, and a link back to where each relationship was found, which is why we prefer this method over a NoSQL approach.
 
 This is the database to store the results of our information extraction. We must also use a database to store the training data for the machine learning models. These will not need a relational database structure as all information can be contained in one row but due to the results being stored in an SQL database it makes sense for all data to be stored in the same place.
 
 \section{Evaluation}
-Dividing the labelled dataset intended for training the models into a training and testing dataset will allow us to test our models on a dataset in which we know the correct classifications. Dividing up the dataset can be done randomly and repeated a number of times to generate and average performance for each model, allowing us to get a better idea of the general performance. The metrics we will use to measure performace are precision, recall, and F1 score. The testing will test different types of model as well as how effective different features are in informing the models' classifcations.
+Dividing the labelled dataset intended for training the models into a training and testing dataset will allow us to test our models on a dataset in which we know the correct classifications. Dividing up the dataset can be done randomly and repeated a number of times to generate and average performance for each model, allowing us to get a better idea of the general performance. The metrics we will use to measure performance are precision, recall, and F1 score. The testing will test different types of model as well as how effective different features are in informing the models' classifications.
 
 \chapter{Methodology}
 \section{Design}
@@ -314,22 +308,22 @@ Working from this design we can break down the functions needing to be written a
 
 \begin{itemize}
 \item Convert raw text input into a workable format for labelling and feature generation \\
-This will be the process of sentence tokenisation, breaking down the input text into single line sentences. This code will also use version 1 of the named entity recognition model to only keep sentences that it percieves to contain either an object, a size, or both.
+This will be the process of sentence tokenisation, breaking down the input text into single line sentences. This code will also use version 1 of the named entity recognition model to only keep sentences that it perceives to contain either an object, a size, or both.
 \item Manually label the entities in the sentences and label the sentences as containing a relationship or not \\
-This function will allow us to more easily label the training data. It will present each sentence one by one and take keyboard inputs to label the words within the sentence as well as the relationship.
+This function will allow us to label the training data more easily. It will present each sentence one by one and take keyboard inputs to label the words within the sentence as well as the relationship.
 \item Generate the features from the labelled sentences \\
 This will be its own function as it is important that it is easy to switch between different feature sets for testing the models. This will take the labelled sentences as an input and output a list of features class tuples where features is a dictionary.
 \item Train the models \\
 Use the training data to train the models and save them as pickle files to be loaded in later.
 \item Test the models \\
-Test the models on a some unseen text data and recording the results for later analysis.
+Test the models on some unseen text data and recording the results for later analysis.
 \end{itemize}
 
 \subsection{Preprocessing}
-Stop-word removal and lemmatisation will be performed on the data before the generation of features but after the manual labelling process. This is to increase the accuracy of manually labelling as the text will be more readable and more easily understood by humans before preprocessing.  \\ ... \\ ... \\ ... \\ Is this implementation?
+Stop-word removal and lemmatisation will be performed on the data before the generation of features but after the manual labelling process. This is to increase the accuracy of manually labelling as the text will be more readable and more easily understood by humans before preprocessing.  
 
 \subsection{Model Design}
-The design of the models comes down to the features being used to inform the classifier and the classifier itself. The features inform the classifer as to the context of the word or relationship that it has been asked to classify.
+The design of the models comes down to the features being used to inform the classifier and the classifier itself. The features inform the classifier as to the context of the word or relationship that it has been asked to classify.
 
 \subsubsection{Features}
 
@@ -349,10 +343,10 @@ Shape                       & The shape of the token how it appeared            
 Part of speech tag          & The part of speech identified by a PoS tagger                                 & “noun"                                \\ \hline
 Previous 3 tokens           & The 3 tokens to come previously in the text, blank if no more words before it & “",“two", “red"                       \\ \hline
 Previous 3 token labels     & The labels given by the model the previous 3 tokens                           & “",“o",“o"                            \\ \hline
-Next 3 tokens               & The 3 token to come next in the text, blank of no more words after            & “went",“down",“the"                   \\ \hline
+Next 3 tokens               & The 3 tokens to come next in the text, blank if no more words after            & “went",“down",“the"                   \\ \hline
 Contains numbers            & Does the token contain numerical characters?                                  & “False"                               \\ \hline
 Contains a unit of size     & Does the token contain a unit of size from a predefined list of units?        & “False"                               \\ \hline
-Sub-tokens                    & If the token contains numbers and letters, seperate them into seperate tokens  & “3",“m"                                \\ \hline
+Sub-tokens                    & If the token contains numbers and letters, separate them into separate tokens  & “3",“m"                                \\ \hline
 \end{tabular}%
 }
 \end{table}
@@ -383,26 +377,24 @@ The models are implementations of models from the {P}ython library scikit-learn 
 \item Multinomial Naive Bayes \\
 Naive Bayes model for discrete features. Has been used in text classification and has been shown to have results comparing to those of SVMs \citep{MNB}.
 \item Bernoulli Naive Bayes \\
-Naive Bayes model for discrete features very similar to multinomial naive bayes, however it differs in that it is designed for binary features. This model is being included as some of the features will be binary and this model could help inform the combined voting model. 
+Naive Bayes model for discrete features very similar to multinomial Naive Bayes, however it differs in that it is designed for binary features. This model is being included as some of the features will be binary and this model could help inform the combined voting model. 
 \item Logistic Regression \\
 Implements regularized logistic regression.
 \item Stochastic Gradient Descent \\
-A standard stochastic gradient descent model, implements a regularised linear model with stochastic gradient descent.
+A standard stochastic gradient descent model that implements a regularised linear model with stochastic gradient descent.
 \item Support Vector \\
-A linear support vector that implements its linear classifier from libsvm \citep{libsvm}.
+A linear support vector that implements it's linear classifier from libsvm \citep{libsvm}.
 \item Linear Support Vector \\
-A linear support vector that implements its linear classifier from liblinear \citep{liblinear} meaning that it is more suited for large datasets than the support vector model.
-\item Nu-Support Vector \\
-A variation on the support vector model that allows control over the number of support vectors. Will be used to test to see the effects that the number of support vectors have on the performance of the support vector models.
+A linear support vector that implements it's linear classifier from liblinear \citep{liblinear} meaning that it is more suited for large datasets than the support vector model.
 \item Combined Voting \\
-The combined voting model will use a set of the above models to each classify the input, it will classify the input by majority vote. This aims to reduce the variance in the performance of the models. If there is an anomalous result that one of the models would have missclassified then the other models will override the vote and will correct the classification.
+The combined voting model will use a set of the above models to each classify the input, it will classify the input by majority vote. This aims to reduce the variance in the performance of the models. If there is an anomalous result that one of the models would have misclassified then the other models will override the vote and will correct the classification.
 \end{itemize}
 
 \section{Implementation}
 
 \subsection{Generating the labelled data}
 
-As outlined earlier there are a number of steps between the raw input data and the labelled features. One of the steps that could potentially be very time consuming when implementating a project of this size is labelling training data. To reduce the amount of time spent on labelling the data for this project we developed a labelling tool that allowed us to more quickly label entities and relationships. It works by displaying each candidate sentence to the user one at a time. An input of “q” means that the sentence does not contain an entity or relationship, else you would either label the entities using the BIO scheme, or label the sentence as having a relationship, depending on what you are labelling the data for.
+As outlined earlier there are a number of steps between the raw input data and the labelled features. One of the steps that could potentially be very time consuming when implementing a project of this size is labelling training data. To reduce the amount of time spent on labelling the data for this project we developed a labelling tool that allowed us to more quickly label entities and relationships. It works by displaying each candidate sentence to the user one at a time. An input of “q” means that the sentence does not contain an entity or relationship, else you would either label the entities using the BIO scheme, or label the sentence as having a relationship, depending on what you are labelling the data for.
 
 \begin{figure}[!htbp]
 \centering
@@ -414,15 +406,15 @@ As outlined earlier there are a number of steps between the raw input data and t
 Having to process and label a large number of sentences is still very time consuming, so again to speed this up we created a basic “version 1” named entity recognition model. This model identified “candidate sentences”. These are sentences that should have a higher likelihood of containing entities. The version 1 model uses regular expressions to identify sentences that contain a unit of size in them. It also uses nltk's built in part-of-speech tagger to identify nouns along with Wordnet, although accuracy in identifying candidate sentences is practically identical whether you also use Wordnet or not.
 
 \subsection{Generating the features}
-Once the data has been labelled we need to generate the features to inform the models as to the context of each classification. To do this for named entity recognition we use the sentence the token was found in, along with the labels for each token. Then using the nltk library for stemming and part of speech tagging, along with a few custom written functions for getting the token shape or the previous tokens etc, we generate a dictionary of features that can then be written to a file or added to a list of training data, along with its class label.
+Once the data has been labelled, we need to generate the features to inform the models as to the context of each classification. To do this for named entity recognition we use the sentence the token was found in, along with the labels for each token. Then using the nltk library for stemming and part of speech tagging, along with a few custom written functions for getting the token shape or the previous tokens etc, we generate a dictionary of features that can then be written to a file or added to a list of training data, along with its class label.
 
 The process is similar for relationship extraction. In this case to generate the features we use the sentence the two types of entity were found in, along with the positions of those entities in the sentence. This is so that we can generate features such as the order that they appeared in, as well as being able to get all the words between them. Once these are generated, again we write the dictionary to a file or list with its class label.
 
 \subsection{Training and testing the models}
-The labelled features are loaded in using pickle as a list of tuples containing feature dictionaries and a class label. They are then are split into a training and testing set. When testing the average performance of the models over different training data the labelled features dataset will be randomly sorted before splitting. The split of the data is 90\% for training and 10\% for testing. The models are then successively trained on the training dataset as well as combined into the voting model, before they are all tested.
+The labelled features are loaded in using pickle as a list of tuples containing feature dictionaries and a class label. They are then are split into a training and testing set. When testing the average performance of the models over different training data the labelled features dataset will be randomly sorted before splitting. The split of the data is 90\% for training and 10\% for testing. The models are then successively trained on the training dataset as well as combined into the voting model before they are all tested.
 
 \subsection{Creating the database}
-The database consists of two tables: one for storing the objects and their average size from all references, and another for storing the references found in the text to the entities and their sizes. The second table is used to calculate the average size of each object from all the various references to them found in the text. The table to store the references also stores the sentence in which the relationship was found and this is helpful when later trying to analyse the performance of the models.
+The database consists of two tables: one for storing the objects and their average size from all references, and another for storing the references found in the text to the entities and their sizes. The second table is used to calculate the average size of each object from all the various references to them found in the text. The table to store the references also stores the sentence in which the relationship was found, and this is helpful when later trying to analyse the performance of the models.
 
 \begin{figure}[!htbp]
 \centering
@@ -432,7 +424,7 @@ The database consists of two tables: one for storing the objects and their avera
 \end{figure}
 
 \subsection{Extracting objects and sizes from text}
-Once the models have been generated they are saved as pickle files. They can then be loaded into another Python script and used to classify incoming text inputs. The implentation of this part is very similar to the implementation of the version 1 model which was used to identify candidate sentences for labelling. The input text is broken down into sentences and run through the named entity recognition model, if both an object and size entity exist in the sentence then it is run through the relationship extraction model. If the entities are classified as being related the the database is searched to see if the object has been found before, if not the a new record is added to the objects table, else a new reference will be added in the references table and the average size updated.
+Once the models have been generated, they are saved as pickle files. They can then be loaded into another Python script and used to classify incoming text inputs. The implentation of this part is very similar to the implementation of the version 1 model which was used to identify candidate sentences for labelling. The input text is broken down into sentences and run through the named entity recognition model, if both an object and size entity exist in the sentence then it is run through the relationship extraction model. If the entities are classified as being related the database is searched to see if the object has been found before, if not the a new record is added to the objects table, else a new reference will be added in the references table and the average size updated.
 
 
 \section{Testing}
@@ -441,7 +433,7 @@ All four parts of main functionality from generating the training data through t
 
 \chapter{Results}
 
-All the subsequent tests were completed on the same training and testing datasets, the only variance between them was the set of features used to inform the models, and the type of model making the classification.
+All the subsequent tests were completed on the same training and testing datasets, the only variance between them was the set of features used to inform the models, and the type of model making the classification. All measures of precision, recall, or F1 score have been averaged over a number of tests to reduce the effect of anomalies.
 
 \section{Named Entity Recognition}
 
@@ -466,7 +458,7 @@ Contains a unit of size & \textbf{X}                          & \textbf{X}      
 Sub-tokens              & \textbf{X}                          & \textbf{X}                          & \textbf{X}                          & \multicolumn{1}{l|}{}               \\ \hline
 \end{longtable}
 
-All of these features sets were tested on each model both with preprocessing and without. Feature sets 1 - 4 have been tested both with and without preprecessing applied.
+All of these feature sets were tested on each model both with preprocessing and without. Feature sets 1 - 4 have been tested both with and without preprecessing applied.
 
 \begin{longtable}{|l|l|l|l|l|}
 \caption{Models performance on feature set 1 with preprocessing for named entity recognition}
@@ -627,12 +619,13 @@ Combined Voting             & 0.82 & 0.86 & 0.83  \\ \hline
 4 & 0.61 & 0.74 \\ \hline
 \end{longtable}
 
-\section{Relationship Extraction}
+The results show that the support vector model was consistently the weakest model, Bernoulli Naive Bayes had the greatest amount of inconsistency in its results, and stochastic gradient descent or combined voting were the most consistent high performers. As shown in Table~\ref{tab:ner_preprocessing} and as hypothesised in section 3.1.2, we can see that preprocessing is detrimental to the results.
 
-These tests were performed on labelled entity information not from sentences labelled by the named entity recognition model. Due to the small number of features used, only one set was tested.
+\section{Relationship Extraction}
+These tests were performed on labelled entity information not from sentences labelled by the named entity recognition model. Due to the small number of features used, only one set was tested. The models were not tested with preprocessing applied due to the features used for the model relying heavily on the words between entities which are likely to be stop-words. 
 
 \begin{longtable}{|l|l|l|l|l|}
-\caption{Models performance with preprocessing for relationship extraction}
+\caption{Models performance without preprocessing for relationship extraction}
 \label{tab:re_feature_set_1}\\
 \hline
 \textbf{Model}          & \multicolumn{1}{c|}{\textbf{Precision}} & \multicolumn{1}{c|}{\textbf{Recall}} & \textbf{F1} \\ \hline
@@ -649,98 +642,101 @@ Linear Support Vector       & 0.66 & 0.69 & 0.66  \\ \hline
 Combined Voting             & 0.83 & 0.77 & 0.72  \\ \hline
 \end{longtable}
 
-\begin{longtable}{|l|l|l|l|l|}
+\section{Number of training records}
+We ran a series of tests to determine how the number of training records effects the model's performance. For these tests we used the combined voting model on feature set 1 without preprocessing.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[scale=0.75]{images/ner_changing_records.JPG}
+\caption{F1 score with respect to training records for named entity recognition}
+\label{fig:ner_changing_records}
+\end{figure}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[scale=0.75]{images/re_changing_records.JPG}
+\caption{F1 score with respect to training records for relationship extraction}
+\label{fig:re_changing_records}
+\end{figure}
+
+As shown in the figures above, the performance of the models does increase as the amount of training data increases, this is as expected for any machine learning model. However, as you increase to more and more records you get diminishing returns on the increase in performance. The graphs indicate that with more training data even greater model performance could be achieved. This suggests that the limiting factor with our model performance is the training data.
+
+\section{Active learning}
+Testing the performance of the model classifications on unseen data is problematic and the classifications need to be checked manually. After one active learning loop and verified classifications being added into the models training data, the training data had doubled in size for named entity examples and had increased by 30\% for relationships. Performance on the testing set was tested for feature set 1 without preprocessing.
+
+\begin{longtable}[c]{|l|l|l|l|}
+\caption{Models performance on feature set 1 without preprocessing for named entity recognition}
+\label{tab:new_ner_feature_set_5}\\
+\hline
+\textbf{Model} & \textbf{Old data F1} & \textbf{New data F1} & \textbf{Change} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+Multinomial Naive Bayes & 0.79 & 0.79 & + 0.00 \\ \hline
+Bernoulli Naive Bayes & 0.72 & 0.65 & - 0.07 \\ \hline
+Logistic Regression & 0.82 & 0.89 & + 0.07 \\ \hline
+Stochastic Gradient Descent & 0.82 & 0.91 & + 0.09 \\ \hline
+Support Vector & 0.59 & 0.65 & + 0.06 \\ \hline
+Linear Support Vector & 0.83 & 0.91 & + 0.08 \\ \hline
+Combined Voting & 0.80 & 0.89 & + 0.09 \\ \hline
+\end{longtable}
+
+\begin{longtable}[c]{|l|l|l|l|}
 \caption{Models performance without preprocessing for relationship extraction}
-\label{tab:re_feature_set_2}\\
+\label{tab:new_re_feature_set_1}\\
 \hline
-\textbf{Model}          & \multicolumn{1}{c|}{\textbf{Precision}} & \multicolumn{1}{c|}{\textbf{Recall}} & \textbf{F1} \\ \hline
+\textbf{Model} & \textbf{Old data F1} & \textbf{New data F1} & \textbf{Change} \\ \hline
 \endfirsthead
 %
 \endhead
 %
-Multinomial Naive Bayes &  &  &   \\ \hline
-Bernoulli Naive Bayes       &  &  &   \\ \hline
-Logistic Regression         &  &  &   \\ \hline
-Stochastic Gradient Descent &  &  &   \\ \hline
-Support Vector              &  &  &   \\ \hline
-Linear Support Vector      &  &  &   \\ \hline
-Combined Voting             &  &  &   \\ \hline
+Multinomial Naive Bayes & 0.66 & 0.74 & + 0.08 \\ \hline
+Bernoulli Naive Bayes & 0.72 & 0.58 & - 0.14 \\ \hline
+Logistic Regression & 0.72 & 0.66 & - 0.06 \\ \hline
+Stochastic Gradient Descent & 0.57 & 0.74 & + 0.17 \\ \hline
+Support Vector & 0.57 & 0.58 & + 0.01 \\ \hline
+Linear Support Vector & 0.66 & 0.74 & + 0.08 \\ \hline
+Combined Voting & 0.72 & 0.74 & + 0.02 \\ \hline
 \end{longtable}
 
-\section{Named Entity Recognition and Relationship Extraction}
-
-Testing first the named entity recognition model and then feeding those classifications into the relationship extraction model to fully test the entire information extraction system.
-
-\begin{longtable}{|l|l|l|l|l|}
-\caption{Models performance on feature set 1}
-\label{tab:ner_re_feature_set_1}\\
-\hline
-\textbf{Model}          & \multicolumn{1}{c|}{\textbf{Precision}} & \multicolumn{1}{c|}{\textbf{Recall}} & \textbf{F1} & \textbf{F1 Variance} \\ \hline
-\endfirsthead
-%
-\endhead
-%
-Multinomial Naive Bayes & \multicolumn{1}{c|}{}                   & \multicolumn{1}{c|}{}                &             &                      \\ \hline
-Bernoulli Naive Bayes       &  &  &  &  \\ \hline
-Logistic Regression         &  &  &  &  \\ \hline
-Stochastic Gradient Descent &  &  &  &  \\ \hline
-Support Vector              &  &  &  &  \\ \hline
-Linear Support Vector       &  &  &  &  \\ \hline
-Nu-Support Vector (0.3)     &  &  &  &  \\ \hline
-Nu-Support Vector (0.5)     &  &  &  &  \\ \hline
-Nu-Support Vector (0.7)     &  &  &  &  \\ \hline
-Combined Voting             &  &  &  &  \\ \hline
-\end{longtable}
-
-\begin{longtable}{|l|l|l|l|l|}
-\caption{Models performance on feature set 2}
-\label{tab:ner_re_feature_set_2}\\
-\hline
-\textbf{Model}          & \multicolumn{1}{c|}{\textbf{Precision}} & \multicolumn{1}{c|}{\textbf{Recall}} & \textbf{F1} & \textbf{F1 Variance} \\ \hline
-\endfirsthead
-%
-\endhead
-%
-Multinomial Naive Bayes & \multicolumn{1}{c|}{}                   & \multicolumn{1}{c|}{}                &             &                      \\ \hline
-Bernoulli Naive Bayes       &  &  &  &  \\ \hline
-Logistic Regression         &  &  &  &  \\ \hline
-Stochastic Gradient Descent &  &  &  &  \\ \hline
-Support Vector              &  &  &  &  \\ \hline
-Linear Support Vector       &  &  &  &  \\ \hline
-Nu-Support Vector (0.3)     &  &  &  &  \\ \hline
-Nu-Support Vector (0.5)     &  &  &  &  \\ \hline
-Nu-Support Vector (0.7)     &  &  &  &  \\ \hline
-Combined Voting             &  &  &  &  \\ \hline
-\end{longtable}
-
-\begin{longtable}[c]{|l|l|l|l|l|}
-\caption{Preprocessing F1 averages for all models on different feature sets}
-\label{tab:ner_re_preprocessing}\\
-\hline
-\textbf{\begin{tabular}[c]{@{}l@{}}Feature \\ Set\end{tabular}} & \multicolumn{1}{c|}{\textbf{None}} & \multicolumn{1}{c|}{\textbf{S}} & \multicolumn{1}{c|}{\textbf{L}} & \multicolumn{1}{c|}{\textbf{S, L}} \\ \hline
-\endfirsthead
-%
-\endhead
-%
-1                                                               & \multicolumn{1}{c|}{}              & \multicolumn{1}{c|}{}           &                                 &                                    \\ \hline
-2                                                               &                                    &                                 &                                 &                                    \\ \hline
-3                                                               &                                    &                                 &                                 &                                    \\ \hline
-\end{longtable}
+Performance for both named entity recognition and relationship extraction has improved. Although it is important to note that the tests are not a true test of how the models will perform on unseen data.
 
 \chapter{Discussion}
 
 \section{Goals achieved}
+Successfully having built machine learning models to identify objects, sizes, and relationships between them, was the primary goal of this project and it has been met. We also successfully tested the effect of many different features on the performance of the models, as well as the effects of changing the amount of training data available. Using the model to generate its own candidate data for labelling and feeding back into the training data was shown to be a viable way to improve it's performance.
 
+\section{Challenges}
+The main challenge in this project was having a sufficient amount labelled data that was representative of the data we wanted to classify. Initially the plan was to generate candidate sentences using a very simple regular expression and noun identifier model, however the number of candidate sentences generated that contained examples of relationships between objects and sizes was very low. It quickly became apparent that gathering enough examples of relationships this way was infeasible given the time scale of the project. To combat this, we wrote 30 examples containing objects, sizes, and relationships. Using this data to train the model we were the able to classify new text data and reduce the error rate significantly. From here the iterative process begun of feeding the classifications, once verified, back into the model.
 
 \section{Future Improvements}
-With more time and computational power a wider variety of machine learning models could be tested to see how they perform. Sci-kit learn from which the models implemented are taken, provides more models that were not implemented due to the scope of the project. There could also be investigation into other libraries or custom implementations of models.
+It was due to the lack of sufficient data that we decided to take an active learning approach over semi-supervised or supervised learning. There would be potential given a longer period of time to gather training data to use either of these other two approaches. It would also be possible to use the system built during this project to generate that dataset and then explore those techniques.
 
-Again, given more time, the scope of this project could have been expanded in terms of the different features tested and the size of the training dataset. These likely would have a greater effect on the performance than a different type of model. These could be achieved by further analysis of the target text datasets to help indicate what features could be informative in making a classification, as well as further reading around the topic into existing named enitity recognition and relationship extraction projects.
+With more time and computational power, a wider variety of machine learning models could be tested to see how they perform. Sci-kit learn from which the models implemented are taken, provides more models that were not implemented due to the scope of the project. There could also be investigation into other libraries or custom implementations of models.
+
+Again, given more time, the scope of this project could have been expanded in terms of the different features tested and the size of the training dataset. These likely would have a greater effect on the performance than a different type of model. These could be achieved by further analysis of the target text datasets to help indicate what features could be informative in making a classification, as well as further reading around the topic into existing named entity recognition and relationship extraction projects.
 
 One of the features tested was the class label of previous tokens. This could be expanded to also include class labels on the next tokens in the sentence. To do this the model needs to perform two passes over the sentence, the first in which it does not take into account the labels of other tokens, and the second in which it does.
 
 \chapter{Conclusion}
+In this project we set out to build a set of machine learning models that would be able to identify object and size entities within sentences, and to determine if they are related. These models can be used to build a database containing objects and their average sizes which could be used in video or image recognition, computer generated scenes, or object comparison applications. \\
 
+\noindent The objectives were:
+
+\begin{itemize}
+\item To build a data labelling tool
+\item To build named entity recognition and relationship extraction models
+\item To be able to identify objects, sizes, and relationships in sentences
+\item To use these models to label new training data (active learning)
+\item To test the performance increase of iteratively generating more training data
+\end{itemize}
+
+By the end of this dissertation project we were able to build both a named entity recognition and relationship extraction model. Testing the performance of both using different underlying algorithms, feature sets, and preprocessing techniques. These models allow us to be able to classify unseen sentences and determine the size of objects found in text.
+
+We were able to evaluate the different machine learning approaches when being applied to our problem and determine the most effective approach. The evaluation metrics used were precision, recall, and F1 score. This allowed us to compare our different approaches to determine which was most effective. These evaluations will help to inform any future work on the project and progress the field forwards.
+
+If the project were to continue, we would first investigate potentially better data sources and ways to process them to more efficiently generate training data. The main challenge in implementing this project was a lack of training data containing descriptions of objects. This led us to having to write our own training data in order to kick start the model which introduced some inaccuracies as our data was not exactly the same as the data the model would be classifying (although it was kept as similar as possible, it is difficult to imitate something you have few examples of).
 
 
 % -------------------------------------------------------------------

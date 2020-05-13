@@ -209,45 +209,48 @@ def classify(test_name, ent, inputFile, outputFile):
             lineCount += 1
             if lineCount % 10 == 0:
                 print(lineCount / 1000)
-            for sentence in sent_tokenize(line):
-                #print("\n#######\n" + sentence)
-                #generate features NER
-                allFeatures = generateFeaturesNER(sentence)
-
-                classifications = []
-                for featuresNum in range(len(allFeatures)):
-                    if featuresNum == 0:
-                        allFeatures[featuresNum]["prev_classes"] = "['','','']"
-                    elif featuresNum == 1:
-                        allFeatures[featuresNum]["prev_classes"] = "['','','" + classifications[featuresNum - 1][0] + "']"
-                    elif featuresNum == 2:
-                        allFeatures[featuresNum]["prev_classes"] = "['','" + classifications[featuresNum - 2][0] + "','" + classifications[featuresNum - 1][0] + "']"
-                    else:
-                        allFeatures[featuresNum]["prev_classes"] = "['" + classifications[featuresNum - 1][0] + "','" + classifications[featuresNum - 2][0] + "','" + classifications[featuresNum - 1][0] + "']"
-
-                    place_in_sentence = allFeatures[featuresNum]['wordnum']
-                    allFeatures[featuresNum].pop('wordnum')
-                    classification = VC.classify(allFeatures[featuresNum])
-                    classifications.append((classification, place_in_sentence))
-                    #print(allFeatures[featuresNum]["token"], classification, place_in_sentence)
-                    allFeaturesClassifictions.append((allFeatures[featuresNum], classification))
-                    fof.write(str((allFeatures[featuresNum], classification)) + "\n")
                 
-                bu = False
-                bn = False
-                #print(classifications)
-                for c in classifications:
-                    if c[0] == 'Bu':
-                        #print("BU TRUE")
-                        bu = True
-                    elif c[0] == 'Bn':
-                        #print("BN TRUE")
-                        bn = True
+            if "<" not in line and "{" not in line and "|" not in line and "===" not in line and "&lt;ref" not in line and "*" not in line and "http" not in line:
+                for sentence in sent_tokenize(line):
+                    sentence = sentence.replace("[","").replace("]","") 
+                    #print("\n#######\n" + sentence)
+                    #generate features NER
+                    allFeatures = generateFeaturesNER(sentence)
 
-                if bu and bn:
-                    of.write(str((sentence, classifications)) + "\n")
-                    allClassifictions.append((sentence, classifications))
-                    #add to file
+                    classifications = []
+                    for featuresNum in range(len(allFeatures)):
+                        if featuresNum == 0:
+                            allFeatures[featuresNum]["prev_classes"] = "['','','']"
+                        elif featuresNum == 1:
+                            allFeatures[featuresNum]["prev_classes"] = "['','','" + classifications[featuresNum - 1][0] + "']"
+                        elif featuresNum == 2:
+                            allFeatures[featuresNum]["prev_classes"] = "['','" + classifications[featuresNum - 2][0] + "','" + classifications[featuresNum - 1][0] + "']"
+                        else:
+                            allFeatures[featuresNum]["prev_classes"] = "['" + classifications[featuresNum - 1][0] + "','" + classifications[featuresNum - 2][0] + "','" + classifications[featuresNum - 1][0] + "']"
+
+                        place_in_sentence = allFeatures[featuresNum]['wordnum']
+                        allFeatures[featuresNum].pop('wordnum')
+                        classification = VC.classify(allFeatures[featuresNum])
+                        classifications.append((classification, place_in_sentence))
+                        #print(allFeatures[featuresNum]["token"], classification, place_in_sentence)
+                        allFeaturesClassifictions.append((allFeatures[featuresNum], classification))
+                        fof.write(str((allFeatures[featuresNum], classification)) + "\n")
+                    
+                    bu = False
+                    bn = False
+                    #print(classifications)
+                    for c in classifications:
+                        if c[0] == 'Bu':
+                            #print("BU TRUE")
+                            bu = True
+                        elif c[0] == 'Bn':
+                            #print("BN TRUE")
+                            bn = True
+
+                    if bu and bn:
+                        of.write(str((sentence, classifications)) + "\n")
+                        allClassifictions.append((sentence, classifications))
+                        #add to file
 
         with open(outputFile[:-4] + '.pickle', 'wb+') as fi:
                 pickle.dump(allClassifictions, fi)
@@ -263,10 +266,11 @@ def classify(test_name, ent, inputFile, outputFile):
         inputF.close()
         classifications = []
         for sentence, labels in inputList:
+            of.write(str(sentence) + "\n")
             allFeatures = generateFeaturesRE(sentence, labels)
             for featuresNum in range(len(allFeatures)):
                 classification = VC.classify(allFeatures[featuresNum])
-                of.write(str((allFeatures[featuresNum], classification)) + "\n")
+                # of.write(str((allFeatures[featuresNum], classification)) + "\n")
                 classifications.append((allFeatures[featuresNum], classification))
 
         with open(outputFile[:-4] + '.pickle', 'wb+') as fi:

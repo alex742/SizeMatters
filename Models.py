@@ -86,15 +86,23 @@ def train(labelled_features_file, test_name, ent):
     inputFile = open(labelled_features_file[:-4] + ".pickle","rb")
     featuresets = pickle.load(inputFile)
     inputFile.close()
-    
+
+    # inputFile2 = open(labelled_features_file[:-4] + "_extra.pickle","rb")
+    # featuresets2 = pickle.load(inputFile2)
+    # inputFile2.close()
+    # featuresets += featuresets2
+
     fair = False
     loops = 0
     if ent == "ner":
         while not fair:
             loops += 1
             random.shuffle(featuresets)
-            training_set = featuresets[:int(len(featuresets) * 0.9)]
-            testing_set =  featuresets[int(len(featuresets) * 0.9):]
+            print("length of featuresets", len(featuresets))
+            new_featuresets = featuresets[:int(len(featuresets) * 1)]
+            print("NEW length of featuresets", len(new_featuresets))
+            training_set = new_featuresets[:int(len(new_featuresets) * 0.9)]
+            testing_set =  new_featuresets[int(len(new_featuresets) * 0.9):]
 
             tro = False
             trbu = False
@@ -134,7 +142,7 @@ def train(labelled_features_file, test_name, ent):
                 print("FAIR")
                 fair = True
 
-            if loops > 100:
+            if loops > 500:
                 print("LOOOOPS")
                 fair = True
                 
@@ -142,8 +150,11 @@ def train(labelled_features_file, test_name, ent):
         while not fair:
             loops += 1
             random.shuffle(featuresets)
-            training_set = featuresets[:int(len(featuresets) * 0.9)]
-            testing_set =  featuresets[int(len(featuresets) * 0.9):]
+            print("length of featuresets", len(featuresets))
+            new_featuresets = featuresets[:int(len(featuresets) * 1)]
+            print("NEW length of featuresets", len(new_featuresets))
+            training_set = new_featuresets[:int(len(new_featuresets) * 0.9)]
+            testing_set =  new_featuresets[int(len(new_featuresets) * 0.9):]
 
             tro = False
             trr = False
@@ -218,7 +229,7 @@ def test(labelled_features_file, test_name, ent, testing_set):
     # inputFile.close() 
     test_log = open("tests/" + test_name + "/test_log_" + ent + "_" + labelled_features_file[-5:-4] + ".txt", "w+")
 
-    # print(len(featuresets))
+    #print(len(testing_set))
             
     #training_set = featuresets[:int(len(featuresets) * 0.9)]
     #testing_set =  featuresets[int(len(featuresets) * 0.9):]
